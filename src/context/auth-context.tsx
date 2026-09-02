@@ -9,7 +9,10 @@ interface AuthContextType {
   user: AuthUser | null;
   token: string | null;
   isLoading: boolean;
-  login: (credentials: { username: string; password: string }) => Promise<void>;
+  login: (
+    credentials: { username: string; password: string },
+    preferredRole?: "admin" | "teacher" | "student" | "parent"
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -37,7 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  const login = async (credentials: { username: string; password: string }) => {
+  const login = async (
+    credentials: { username: string; password: string },
+    preferredRole?: "admin" | "teacher" | "student" | "parent"
+  ) => {
     try {
       const res = await api.post<ApiResponse<LoginResponseData>>(
         "/auth/login",
@@ -48,7 +54,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(authUser);
       localStorage.setItem("school_sphere_token", accessToken);
       localStorage.setItem("school_sphere_user", JSON.stringify(authUser));
-      router.push("/dashboard");
+
+      // Role-based routing
+      const targetRole = preferredRole?.toUpperCase() || (authUser?.role || "").toUpperCase();
+      if (targetRole === "TEACHER") {
+        router.push("/teacher/dashboard");
+      } else if (targetRole === "STUDENT") {
+        router.push("/student/dashboard");
+      } else if (targetRole === "PARENT") {
+        router.push("/parent/dashboard");
+      } else {
+        router.push("/dashboard");
+      }
     } catch (error) {
       throw new Error(getErrorMessage(error));
     }

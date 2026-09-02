@@ -32,17 +32,8 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      await login({ username, password });
+      await login({ username, password }, activeRole);
       toast.success("Successfully authenticated");
-      if (activeRole === "teacher") {
-        router.push("/teacher/dashboard");
-      } else if (activeRole === "student") {
-        router.push("/student/dashboard");
-      } else if (activeRole === "parent") {
-        router.push("/parent/dashboard");
-      } else {
-        router.push("/dashboard");
-      }
     } catch (err: any) {
       toast.error(err.message || "Authentication failed. Check credentials or backend connection.");
     } finally {
