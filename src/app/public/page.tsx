@@ -314,6 +314,62 @@ export default function PublicPortalPage() {
         </div>
       </section>
 
+      {/* Hero Section */}
+      <section id="overview" className="relative py-20 px-6 md:px-12 text-center max-w-4xl mx-auto space-y-5">
+        <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400 shadow-sm">
+          <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+          <span>Unified Enterprise Academic Administration</span>
+        </div>
+
+        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white leading-tight">
+          Modern Institutional Campus for Educators, Learners & Families
+        </h1>
+
+        <p className="text-sm md:text-base text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+          School Sphere coordinates classroom scheduling, real-time roll call attendance, evaluation report cards, and parent communications on a single secure platform.
+        </p>
+
+        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+          <Link href="/login">
+            <Button size="lg" className="gap-2 h-9 text-xs">
+              <span>Enter Workspace</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Button>
+          </Link>
+          <a href="#portals">
+            <Button variant="outline" size="lg" className="h-9 text-xs">
+              Explore Role Portals
+            </Button>
+          </a>
+        </div>
+
+        {/* Live Academic Metric Tiles */}
+        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3">
+          {[
+            { label: "Enrolled Scholars", value: totalStudents, icon: Users },
+            { label: "Faculty Educators", value: totalTeachers, icon: UserCheck },
+            { label: "Classroom Cohorts", value: totalClasses, icon: Layers },
+            { label: "Curriculum Subjects", value: totalSubjects, icon: BookOpen },
+          ].map((stat, idx) => {
+            const Icon = stat.icon;
+            return (
+              <div
+                key={idx}
+                className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] text-center shadow-sm dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+              >
+                <div className="flex justify-center mb-1 text-zinc-400">
+                  <Icon className="h-4 w-4" />
+                </div>
+                <div className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight tabular-nums">
+                  {stat.value}
+                </div>
+                <div className="text-[11px] text-zinc-500 mt-0.5">{stat.label}</div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
+
       {/* Role Portal Gateways */}
       <section id="portals" className="py-12 px-6 md:px-12 max-w-5xl mx-auto w-full">
         <div className="text-center space-y-1 mb-8">
