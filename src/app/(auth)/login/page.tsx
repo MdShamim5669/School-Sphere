@@ -78,9 +78,9 @@ export default function LoginPage() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-zinc-950 dark:bg-[#09090b] p-4 bg-grid-subtle select-none overflow-hidden font-sans">
       {/* Ambient background glowing light blobs */}
-      <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-blue-600/20 blur-[128px] pointer-events-none" />
-      <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-indigo-600/20 blur-[128px] pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-sky-500/10 blur-[160px] pointer-events-none" />
+      <div className="absolute -top-40 -left-40 h-96 w-96 rounded-full bg-[#be123c]/20 blur-[128px] pointer-events-none" />
+      <div className="absolute -bottom-40 -right-40 h-96 w-96 rounded-full bg-[#881337]/20 blur-[128px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[500px] rounded-full bg-[#991b2e]/10 blur-[160px] pointer-events-none" />
 
       {/* Subtle overlay */}
       <div className="absolute inset-0 bg-radial from-transparent via-zinc-950/60 to-zinc-950 pointer-events-none" />
@@ -92,14 +92,14 @@ export default function LoginPage() {
         className="relative w-full max-w-md rounded-2xl border border-white/10 dark:border-zinc-800/80 bg-zinc-900/90 dark:bg-[#111114]/90 p-8 md:p-9 backdrop-blur-xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.7),inset_0_1px_0_0_rgba(255,255,255,0.1)] z-10"
       >
         {/* Top Accent Gradient Bar */}
-        <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-80" />
+        <div className="absolute -top-px left-8 right-8 h-px bg-gradient-to-r from-transparent via-[#be123c] to-transparent opacity-80" />
 
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center">
           <motion.div
             whileHover={{ scale: 1.05, rotate: 3 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
-            className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-sky-500 text-white shadow-lg shadow-blue-500/25 ring-4 ring-blue-500/10 mb-4 cursor-pointer"
+            className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#be123c] via-[#991b2e] to-[#70102b] text-white shadow-lg shadow-[#991b2e]/30 ring-4 ring-[#be123c]/10 mb-4 cursor-pointer"
           >
             <GraduationCap className="h-7 w-7" />
           </motion.div>
@@ -115,7 +115,7 @@ export default function LoginPage() {
         <div className="mt-7 space-y-2">
           <div className="flex items-center justify-between">
             <label className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400 flex items-center gap-1.5">
-              <Sparkles className="h-3 w-3 text-blue-400" />
+              <Sparkles className="h-3 w-3 text-[#f43f5e]" />
               <span>Select Role Preset</span>
             </label>
             <span className="text-[10px] text-zinc-500 font-mono">Quick Demo</span>
@@ -140,7 +140,7 @@ export default function LoginPage() {
                   {isActive && (
                     <motion.div
                       layoutId="activeRoleBg"
-                      className="absolute inset-0 rounded-lg bg-gradient-to-b from-blue-600 to-blue-700 shadow-md shadow-blue-600/30 border border-blue-400/30"
+                      className="absolute inset-0 rounded-lg bg-gradient-to-b from-[#be123c] to-[#991b2e] shadow-md shadow-[#991b2e]/30 border border-rose-400/30"
                       transition={{ type: "spring", stiffness: 500, damping: 35 }}
                     />
                   )}
@@ -186,7 +186,7 @@ export default function LoginPage() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
-                className="pl-10 h-10 bg-zinc-950/70 border-white/10 text-white placeholder:text-zinc-500 focus:border-blue-500 focus:ring-blue-500/30 text-xs"
+                className="pl-10 h-10 bg-zinc-950/70 border-white/10 text-white placeholder:text-zinc-500 focus:border-[#be123c] focus:ring-[#be123c]/30 text-xs"
                 required
               />
             </div>
@@ -194,7 +194,7 @@ export default function LoginPage() {
 
           <Button
             type="submit"
-            className="w-full h-11 text-xs font-semibold mt-3 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30 transition-all duration-200 active:scale-[0.99]"
+            className="w-full h-11 text-xs font-semibold mt-3 bg-gradient-to-r from-[#be123c] via-[#991b2e] to-[#881337] hover:from-[#991b2e] hover:to-[#70102b] text-white shadow-lg shadow-[#991b2e]/30 border border-rose-400/30 transition-all duration-200 active:scale-[0.99]"
             disabled={loading}
           >
             {loading ? (
@@ -215,7 +215,7 @@ export default function LoginPage() {
         <div className="mt-7 pt-5 border-t border-white/10 flex flex-col items-center gap-2 text-center text-xs">
           <Link
             href="/public"
-            className="text-zinc-400 hover:text-blue-400 transition-colors flex items-center gap-1.5 font-medium group"
+            className="text-zinc-400 hover:text-[#f43f5e] transition-colors flex items-center gap-1.5 font-medium group"
           >
             <span>Explore Public Campus Portal</span>
             <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />

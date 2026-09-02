@@ -31,7 +31,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantClasses = {
       default:
-        "bg-blue-600 text-white hover:bg-blue-500 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.3)] active:translate-y-[0.5px]",
+        "bg-[#991b2e] dark:bg-[#be123c] text-white hover:bg-[#831626] dark:hover:bg-[#a01132] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.3)] active:translate-y-[0.5px]",
       destructive:
         "bg-red-600 text-white hover:bg-red-500 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.2),0_1px_2px_rgba(0,0,0,0.3)] active:translate-y-[0.5px]",
       outline:
@@ -40,9 +40,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-zinc-100 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-200 dark:hover:bg-zinc-700/80 border border-zinc-200 dark:border-zinc-700/50 shadow-sm active:translate-y-[0.5px]",
       ghost:
         "hover:bg-zinc-100 dark:hover:bg-zinc-800/60 text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100",
-      link: "text-blue-600 dark:text-blue-400 underline-offset-4 hover:underline",
+      link: "text-[#991b2e] dark:text-[#f43f5e] underline-offset-4 hover:underline",
       gradient:
-        "bg-blue-600 hover:bg-blue-500 text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_1px_3px_rgba(0,0,0,0.4)] active:translate-y-[0.5px]",
+        "bg-[#991b2e] hover:bg-[#831626] text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.25),0_1px_3px_rgba(0,0,0,0.4)] active:translate-y-[0.5px]",
     };
 
     const sizeClasses = {
@@ -55,7 +55,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(
-          "inline-flex items-center justify-center whitespace-nowrap font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none",
+          "inline-flex items-center justify-center whitespace-nowrap font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#991b2e]/50 disabled:pointer-events-none disabled:opacity-50 cursor-pointer select-none",
           variantClasses[variant],
           sizeClasses[size],
           className

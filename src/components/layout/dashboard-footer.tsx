@@ -40,16 +40,16 @@ export default function DashboardFooter() {
   return (
     <footer className="mt-14 space-y-12 pt-4 select-none">
       {/* Top CTA Banner matching reference image */}
-      <div className="relative overflow-hidden rounded-3xl bg-[#092b21] px-8 py-10 sm:px-12 sm:py-14 md:px-16 md:py-16 text-white shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-[#881337] dark:bg-[#70102b] px-8 py-10 sm:px-12 sm:py-14 md:px-16 md:py-16 text-white shadow-2xl">
         {/* Soft atmospheric depth highlight */}
-        <div className="absolute -right-12 -top-12 h-72 w-72 rounded-full bg-[#10b981]/15 blur-3xl pointer-events-none" />
-        <div className="absolute -left-12 -bottom-12 h-72 w-72 rounded-full bg-[#84cc16]/10 blur-3xl pointer-events-none" />
+        <div className="absolute -right-12 -top-12 h-72 w-72 rounded-full bg-[#be123c]/20 blur-3xl pointer-events-none" />
+        <div className="absolute -left-12 -bottom-12 h-72 w-72 rounded-full bg-[#991b2e]/20 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
           <div className="space-y-4 max-w-2xl">
             {/* Pill badge matching reference */}
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#b5f242] px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#092b21] shadow-sm">
-              <GraduationCap className="h-3.5 w-3.5 text-[#092b21]" />
+            <div className="inline-flex items-center gap-2 rounded-full bg-white/95 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#881337] shadow-sm">
+              <GraduationCap className="h-3.5 w-3.5 text-[#881337]" />
               <span>Start Learning Today</span>
             </div>
 
@@ -78,7 +78,7 @@ export default function DashboardFooter() {
           {/* Action Pill Button matching reference */}
           <div className="shrink-0">
             <Link href="/login">
-              <button className="inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-xs md:text-sm font-bold text-[#092b21] hover:bg-[#f1f5f3] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-md">
+              <button className="inline-flex items-center gap-2.5 rounded-full bg-white px-7 py-3.5 text-xs md:text-sm font-bold text-[#881337] hover:bg-[#fff1f2] hover:shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-md">
                 <span>Apply Now Today</span>
                 <ArrowUpRight className="h-4 w-4 stroke-[2.5]" />
               </button>
@@ -92,10 +92,10 @@ export default function DashboardFooter() {
         {/* Brand Column */}
         <div className="md:col-span-4 space-y-4">
           <div className="flex items-center gap-2.5">
-            {/* Modern dual-stripe emblem like EduNova */}
+            {/* Modern dual-stripe emblem like UniCamp */}
             <div className="flex items-center gap-1">
-              <div className="h-6 w-2 rounded-full bg-[#a3e635]" />
-              <div className="h-6 w-2 rounded-full bg-[#84cc16]" />
+              <div className="h-6 w-2 rounded-full bg-[#be123c]" />
+              <div className="h-6 w-2 rounded-full bg-[#881337]" />
             </div>
             <span className="font-heading text-2xl font-bold tracking-tight text-zinc-900 dark:text-white">
               School Sphere
@@ -108,7 +108,7 @@ export default function DashboardFooter() {
 
           {/* Email Subscription Box */}
           <form onSubmit={handleSubscribe} className="relative max-w-[280px] pt-1">
-            <div className="flex items-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 pl-5 pr-1.5 py-1.5 shadow-sm focus-within:border-zinc-400 dark:focus-within:border-zinc-600 focus-within:ring-2 focus-within:ring-emerald-500/10 transition-all">
+            <div className="flex items-center rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/90 pl-5 pr-1.5 py-1.5 shadow-sm focus-within:border-[#be123c] dark:focus-within:border-[#be123c] focus-within:ring-2 focus-within:ring-rose-500/20 transition-all">
               <input
                 type="email"
                 placeholder="enter your mail"
@@ -118,7 +118,7 @@ export default function DashboardFooter() {
               />
               <button
                 type="submit"
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#092b21] dark:bg-[#b5f242] text-white dark:text-[#092b21] hover:opacity-90 transition-opacity cursor-pointer shrink-0 shadow-sm"
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-[#881337] dark:bg-[#be123c] text-white hover:opacity-90 transition-opacity cursor-pointer shrink-0 shadow-sm"
                 title="Subscribe"
               >
                 <ArrowUpRight className="h-4 w-4 stroke-[2.5]" />

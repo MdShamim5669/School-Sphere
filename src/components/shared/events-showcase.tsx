@@ -92,8 +92,8 @@ export default function EventsShowcase() {
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
         <div className="space-y-4 max-w-2xl">
           {/* Badge matching reference */}
-          <div className="inline-flex items-center gap-2 rounded-md bg-[#092b21] dark:bg-[#0c3327] px-3.5 py-1.5 text-[11px] font-bold tracking-wider text-[#a3e635] uppercase border border-[#a3e635]/20 shadow-sm">
-            <GraduationCap className="h-3.5 w-3.5 text-[#a3e635]" />
+          <div className="inline-flex items-center gap-2 rounded-md bg-[#881337]/10 dark:bg-[#be123c]/20 px-3.5 py-1.5 text-[11px] font-bold tracking-wider text-[#881337] dark:text-[#f43f5e] uppercase border border-[#881337]/20 shadow-sm">
+            <GraduationCap className="h-3.5 w-3.5 text-[#881337] dark:text-[#f43f5e]" />
             <span>Our Events</span>
           </div>
 
@@ -108,7 +108,7 @@ export default function EventsShowcase() {
         <div className="flex items-center gap-3 shrink-0">
           <button
             onClick={handlePrev}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#b5f242] text-[#092b21] hover:bg-[#a3e635] transition-all cursor-pointer shadow-sm active:scale-95"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#881337] dark:bg-[#be123c] text-white hover:bg-[#70102b] dark:hover:bg-[#a01132] transition-all cursor-pointer shadow-sm active:scale-95"
             title="Previous Events"
             aria-label="Previous events"
           >
@@ -116,7 +116,7 @@ export default function EventsShowcase() {
           </button>
           <button
             onClick={handleNext}
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#b5f242] text-[#092b21] hover:bg-[#a3e635] transition-all cursor-pointer shadow-sm active:scale-95"
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[#881337] dark:bg-[#be123c] text-white hover:bg-[#70102b] dark:hover:bg-[#a01132] transition-all cursor-pointer shadow-sm active:scale-95"
             title="Next Events"
             aria-label="Next events"
           >

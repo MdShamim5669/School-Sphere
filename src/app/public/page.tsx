@@ -169,7 +169,7 @@ export default function PublicPortalPage() {
       {/* Navigation Bar */}
       <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-zinc-200 dark:border-zinc-800/80 bg-white/95 dark:bg-[#0c0c0e]/95 backdrop-blur-md px-6 md:px-12 transition-colors">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 shadow-sm text-blue-600 dark:text-blue-400">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 shadow-sm text-[#991b2e] dark:text-[#f43f5e]">
             <GraduationCap className="h-4 w-4" />
           </div>
           <div className="flex flex-col">
@@ -223,7 +223,7 @@ export default function PublicPortalPage() {
       {/* Hero Section */}
       <section id="overview" className="relative py-20 px-6 md:px-12 text-center max-w-4xl mx-auto space-y-5">
         <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400 shadow-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
+          <span className="h-1.5 w-1.5 rounded-full bg-[#991b2e] dark:bg-[#be123c]" />
           <span>Unified Enterprise Academic Administration</span>
         </div>
 
@@ -295,14 +295,14 @@ export default function PublicPortalPage() {
                 <Card className="hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-[#141418] transition-all group cursor-pointer h-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 group-hover:text-blue-600 dark:group-hover:text-white transition-colors">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 group-hover:text-[#991b2e] dark:group-hover:text-white transition-colors">
                         <Icon className="h-4 w-4" />
                       </div>
                       <Badge variant="secondary" className="text-[10px]">
                         {portal.badge}
                       </Badge>
                     </div>
-                    <CardTitle className="mt-3 text-sm font-semibold group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                    <CardTitle className="mt-3 text-sm font-semibold group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors">
                       {portal.title}
                     </CardTitle>
                     <CardDescription className="text-xs">
@@ -310,7 +310,7 @@ export default function PublicPortalPage() {
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <div className="flex items-center gap-1 text-xs font-medium text-blue-600 dark:text-blue-400">
+                    <div className="flex items-center gap-1 text-xs font-medium text-[#991b2e] dark:text-[#f43f5e]">
                       <span>Launch portal view</span>
                       <ArrowRight className="h-3 w-3" />
                     </div>
@@ -342,7 +342,7 @@ export default function PublicPortalPage() {
                 className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] space-y-2 shadow-sm"
               >
                 <div className="flex items-center justify-between">
-                  <div className="h-8 w-8 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-blue-600 dark:text-blue-400">
+                  <div className="h-8 w-8 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-[#991b2e] dark:text-[#f43f5e]">
                     <Icon className="h-4 w-4" />
                   </div>
                   <span className="text-[10px] font-mono text-zinc-400">{dept.code}</span>
@@ -363,7 +363,7 @@ export default function PublicPortalPage() {
         <div className="space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-800 text-blue-600 dark:text-blue-400">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-800 text-[#991b2e] dark:text-[#f43f5e]">
                 <Megaphone className="h-4 w-4" />
               </div>
               <div>
@@ -373,7 +373,7 @@ export default function PublicPortalPage() {
                 <p className="text-xs text-zinc-500">Live institutional updates and schedule notices</p>
               </div>
             </div>
-            <Link href="/announcements" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+            <Link href="/announcements" className="text-xs text-[#991b2e] dark:text-[#f43f5e] hover:underline">
               View All Bulletins &rarr;
             </Link>
           </div>
