@@ -2,8 +2,27 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { GraduationCap, ArrowUpRight } from "lucide-react";
 import { toast } from "sonner";
+
+const headlineLine1 = "Join Our School";
+const headlineLine2 = "And Achieve Success";
+
+const typingContainerVariants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.05, // 50ms delay per character
+    },
+  },
+};
+
+const typingCharVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
 
 export default function DashboardFooter() {
   const [email, setEmail] = useState("");
@@ -34,11 +53,26 @@ export default function DashboardFooter() {
               <span>Start Learning Today</span>
             </div>
 
-            {/* Big Headline */}
-            <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-white leading-[1.12]">
-              Join Our University <br />
-              And Achieve Success
-            </h2>
+            {/* Big Headline with 50ms character typing animation */}
+            <motion.h2
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={typingContainerVariants}
+              className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-white leading-[1.12]"
+            >
+              {headlineLine1.split("").map((char, index) => (
+                <motion.span key={`l1-${index}`} variants={typingCharVariants}>
+                  {char}
+                </motion.span>
+              ))}
+              <br />
+              {headlineLine2.split("").map((char, index) => (
+                <motion.span key={`l2-${index}`} variants={typingCharVariants}>
+                  {char}
+                </motion.span>
+              ))}
+            </motion.h2>
           </div>
 
           {/* Action Pill Button matching reference */}
