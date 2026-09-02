@@ -9,377 +9,508 @@ import {
   Layers,
   Users,
   Clock,
-  Plus,
-  CheckCircle,
-  FileSpreadsheet,
-  ClipboardList,
   ChevronRight,
-  ShieldCheck,
+  MoreHorizontal,
+  Mail,
+  Phone,
+  Droplet,
+  CalendarDays,
+  Building2,
+  CheckCircle2,
+  ChevronDown,
 } from "lucide-react";
 import { useTeachers } from "@/hooks/use-teachers";
 import { useLessons } from "@/hooks/use-lessons";
 import { useClasses } from "@/hooks/use-academic";
 import { useStudents } from "@/hooks/use-students";
-import { useExams, useAssignments } from "@/hooks/use-assessments";
-import PageHeader from "@/components/shared/page-header";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { formatTime, formatDate } from "@/lib/utils";
+import { useAnnouncements } from "@/hooks/use-notices";
+import { formatDate } from "@/lib/utils";
+
+// ─── Lesson Colors ───
+const LESSON_COLORS: Record<string, { bg: string; darkBg: string; text: string; darkText: string }> = {
+  Physics: { bg: "bg-[#FAE27C]", darkBg: "dark:bg-amber-950/60", text: "text-amber-950", darkText: "dark:text-amber-200" },
+  Chemistry: { bg: "bg-[#C3EBFA]", darkBg: "dark:bg-sky-950/60", text: "text-sky-900", darkText: "dark:text-sky-200" },
+  Biology: { bg: "bg-[#CFCEFF]", darkBg: "dark:bg-violet-950/60", text: "text-violet-950", darkText: "dark:text-violet-200" },
+};
+
+function getScheduleColor(name: string) {
+  if (name.includes("Physics")) {
+    return { bg: "bg-[#FAE27C]", darkBg: "dark:bg-amber-950/60", text: "text-amber-950", darkText: "dark:text-amber-200" };
+  }
+  if (name.includes("Chemistry")) {
+    return { bg: "bg-[#C3EBFA]", darkBg: "dark:bg-sky-950/60", text: "text-sky-900", darkText: "dark:text-sky-200" };
+  }
+  return { bg: "bg-[#CFCEFF]", darkBg: "dark:bg-violet-950/60", text: "text-violet-950", darkText: "dark:text-violet-200" };
+}
+
+const TIME_SLOTS = [
+  "8:00 AM",
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "12:00 PM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+];
+
+const DAYS = ["MON", "TUE", "WED", "THU", "FRI"];
+
+// Reference teacher schedule mapping
+const DEFAULT_TEACHER_SCHEDULE: Record<string, Record<string, { name: string; time: string } | null>> = {
+  "8:00 AM": {
+    MON: { name: "4A - Physics", time: "8:00 AM - 8:45 AM" },
+    TUE: null,
+    WED: { name: "1A - Chemistry", time: "8:00 AM - 8:45 AM" },
+    THU: null,
+    FRI: { name: "4A - Chemistry", time: "8:00 AM - 8:45 AM" },
+  },
+  "9:00 AM": {
+    MON: { name: "3B - Physics", time: "9:00 AM - 9:45 AM" },
+    TUE: { name: "2B - Physics", time: "9:00 AM - 9:45 AM" },
+    WED: null,
+    THU: { name: "6A - Physics", time: "9:00 AM - 9:45 AM" },
+    FRI: { name: "3B - Physics", time: "9:00 AM - 9:45 AM" },
+  },
+  "10:00 AM": {
+    MON: { name: "2B", time: "10:00 AM - 10:45 AM" },
+    TUE: { name: "3A - Physics", time: "10:00 AM - 10:45 AM" },
+    WED: { name: "2B - Physics", time: "10:00 AM - 10:45 AM" },
+    THU: { name: "6B - Chemistry", time: "10:00 AM - 10:45 AM" },
+    FRI: null,
+  },
+  "11:00 AM": {
+    MON: { name: "5A - Physics", time: "11:00 AM - 11:45 AM" },
+    TUE: { name: "5B - Physics", time: "11:00 AM - 11:45 AM" },
+    WED: null,
+    THU: { name: "5C - Physics", time: "11:00 AM - 11:45 AM" },
+    FRI: { name: "6A - Physics", time: "11:00 AM - 11:45 AM" },
+  },
+  "12:00 PM": {
+    MON: null,
+    TUE: null,
+    WED: null,
+    THU: null,
+    FRI: null,
+  },
+  "1:00 PM": {
+    MON: { name: "6C", time: "1:00 PM - 1:45 PM" },
+    TUE: null,
+    WED: { name: "3C - Chemistry", time: "1:00 PM - 1:45 PM" },
+    THU: null,
+    FRI: { name: "6A - Chemistry", time: "1:00 PM - 1:45 PM" },
+  },
+  "2:00 PM": {
+    MON: { name: "2B - Physics", time: "2:00 PM - 2:45 PM" },
+    TUE: { name: "1A - Physics", time: "2:00 PM - 2:45 PM" },
+    WED: null,
+    THU: { name: "4A - Chemistry", time: "2:00 PM - 2:45 PM" },
+    FRI: { name: "6B - Chemistry", time: "2:00 PM - 2:45 PM" },
+  },
+  "3:00 PM": {
+    MON: null,
+    TUE: null,
+    WED: null,
+    THU: null,
+    FRI: null,
+  },
+  "4:00 PM": {
+    MON: null,
+    TUE: null,
+    WED: null,
+    THU: null,
+    FRI: null,
+  },
+};
 
 export default function TeacherDashboardPage() {
-  const { data: teachersData, isLoading: loadingTeachers } = useTeachers({ limit: 50 });
+  const { data: teachersData } = useTeachers({ limit: 50 });
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>("");
+  const [viewMode, setViewMode] = useState<"workWeek" | "day">("workWeek");
 
   const teachers = teachersData?.data || [];
-  const activeTeacher =
-    teachers.find((t) => t.id === selectedTeacherId) || teachers[0];
+  const activeTeacher = teachers.find((t) => t.id === selectedTeacherId) || teachers[0];
 
-  // Fetch lessons assigned to this teacher
   const { data: lessonsData } = useLessons({
     teacherId: activeTeacher?.id,
     limit: 100,
   });
-
-  // Fetch supervised class or all classes
   const { data: classesData } = useClasses({ limit: 100 });
-  const supervisedClasses = classesData?.data?.filter(
-    (c) => c.supervisorId === activeTeacher?.id
-  ) || [];
+  const { data: announcementsData } = useAnnouncements({ limit: 4 });
 
-  // Fetch students in this teacher's classes
-  const targetClassId = supervisedClasses[0]?.id || classesData?.data?.[0]?.id;
-  const { data: studentsData } = useStudents({
-    classId: targetClassId,
-    limit: 20,
-  });
-
-  const { data: examsData } = useExams({ limit: 10 });
-  const { data: assignmentsData } = useAssignments({ limit: 10 });
-
-  const teacherLessons = lessonsData?.data || [];
+  const teacherName = activeTeacher ? `${activeTeacher.name} ${activeTeacher.surname}` : "Dean Guerrero";
+  const teacherEmail = activeTeacher?.email || "dean@gmail.com";
+  const teacherPhone = activeTeacher?.phone || "+1 543 235 64";
+  const announcements = announcementsData?.data?.slice(0, 3) || [];
 
   return (
-    <div className="space-y-8">
-      {/* Page Header with Teacher Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-5 border-b border-zinc-800/80">
-        <div>
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium mb-1.5">
-            <UserCheck className="h-3.5 w-3.5" />
-            <span>Faculty Educator Workspace</span>
-          </div>
-          <h1 className="text-xl md:text-2xl font-semibold tracking-tight text-white">
-            Teacher Classroom Hub
-          </h1>
-          <p className="mt-1 text-xs text-zinc-400">
-            Instructional timetable, classroom management, roll call, and grade assessment tools.
-          </p>
-        </div>
-
-        {/* Teacher Switcher dropdown */}
-        <div className="flex items-center gap-2.5">
-          <span className="text-xs text-zinc-500 shrink-0">Faculty:</span>
-          <select
-            value={activeTeacher?.id || ""}
-            onChange={(e) => setSelectedTeacherId(e.target.value)}
-            className="h-8 rounded-md border border-zinc-800 bg-zinc-900 px-2.5 py-1 text-xs font-medium text-white focus:outline-none focus:border-zinc-700"
-          >
-            {teachers.map((t) => (
-              <option key={t.id} value={t.id}>
-                {t.name} {t.surname} (@{t.username})
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-
-      {/* Teacher Profile Summary Banner */}
-      {activeTeacher && (
-        <div className="rounded-xl border border-zinc-800/80 bg-[#111114] p-5 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]">
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-5">
-            <div className="flex items-center gap-3.5">
-              <Avatar className="h-12 w-12 border border-zinc-700/60 shadow-sm">
-                <AvatarFallback className="bg-zinc-800 text-sm text-zinc-200 font-semibold">
-                  {activeTeacher.name[0]}
-                  {activeTeacher.surname[0]}
-                </AvatarFallback>
-              </Avatar>
-              <div className="space-y-0.5">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-base font-semibold text-white">
-                    {activeTeacher.name} {activeTeacher.surname}
-                  </h2>
-                  <Badge variant="secondary" className="text-[10px]">
-                    Faculty
-                  </Badge>
-                </div>
-                <div className="flex flex-wrap items-center gap-2 text-xs text-zinc-400">
-                  <span>@{activeTeacher.username}</span>
-                  <span>&bull;</span>
-                  <span>{activeTeacher.email || "faculty@schoolsphere.edu"}</span>
-                  <span>&bull;</span>
-                  <span>{activeTeacher.phone || "+1 (555) 019-2834"}</span>
-                </div>
+    <div className="flex flex-col lg:flex-row gap-6 min-h-[calc(100vh-8rem)]">
+      {/* ────────────────── LEFT COLUMN: Profile & Schedule ────────────────── */}
+      <div className="flex-1 min-w-0 space-y-6">
+        {/* Top Section: Teacher Profile Card + 4 Mini Stat Badges */}
+        <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
+          {/* Teacher Profile Card */}
+          <div className="xl:col-span-7 rounded-2xl bg-[#C3EBFA] dark:bg-sky-950/40 border border-sky-200/80 dark:border-sky-800/40 p-5 md:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            {/* Avatar Headshot */}
+            <div className="relative shrink-0">
+              <div className="h-20 w-20 md:h-24 md:w-24 rounded-full overflow-hidden border-2 border-white dark:border-zinc-800 shadow-md bg-white">
+                <img
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
+                  alt={teacherName}
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <Link href="/attendance">
-                <Button size="sm" className="gap-1.5 text-xs h-8">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  <span>Take Attendance</span>
-                </Button>
-              </Link>
-              <Link href="/exams">
-                <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
-                  <FileSpreadsheet className="h-3.5 w-3.5 text-zinc-400" />
-                  <span>Create Exam</span>
-                </Button>
-              </Link>
+            {/* Profile Info */}
+            <div className="space-y-2 flex-1 min-w-0">
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white font-heading truncate">
+                  {teacherName}
+                </h2>
+                {/* Teacher Switcher */}
+                {teachers.length > 0 && (
+                  <div className="relative">
+                    <select
+                      value={activeTeacher?.id || ""}
+                      onChange={(e) => setSelectedTeacherId(e.target.value)}
+                      className="h-7 pl-2 pr-6 rounded-md border border-sky-300/60 dark:border-sky-700 bg-white/80 dark:bg-zinc-900 text-[11px] font-medium text-zinc-800 dark:text-zinc-200 appearance-none cursor-pointer focus:outline-none"
+                    >
+                      {teachers.map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {t.name} {t.surname}
+                        </option>
+                      ))}
+                    </select>
+                    <ChevronDown className="absolute right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 text-zinc-500 pointer-events-none" />
+                  </div>
+                )}
+              </div>
+
+              <p className="text-xs text-zinc-600 dark:text-zinc-300 line-clamp-2 leading-relaxed">
+                Dedicated senior faculty member coordinating secondary Physics and Chemistry laboratory curricula.
+              </p>
+
+              {/* Meta Chips */}
+              <div className="grid grid-cols-2 gap-2 pt-1 text-[11px] text-zinc-700 dark:text-zinc-300">
+                <div className="flex items-center gap-1.5 truncate">
+                  <Droplet className="h-3.5 w-3.5 text-rose-500 shrink-0" />
+                  <span className="font-semibold">A+</span>
+                  <span className="text-zinc-500">Blood</span>
+                </div>
+                <div className="flex items-center gap-1.5 truncate">
+                  <CalendarDays className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                  <span>January 2025</span>
+                </div>
+                <div className="flex items-center gap-1.5 truncate">
+                  <Mail className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                  <span className="truncate">{teacherEmail}</span>
+                </div>
+                <div className="flex items-center gap-1.5 truncate">
+                  <Phone className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
+                  <span>{teacherPhone}</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Quick Metrics */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5 pt-4 border-t border-zinc-800/80 text-xs">
-            <div>
-              <span className="text-zinc-500 block text-[11px]">Assigned Lessons</span>
-              <span className="text-sm font-semibold text-white tabular-nums">{teacherLessons.length}</span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[11px]">Curriculum Subjects</span>
-              <span className="text-sm font-semibold text-white tabular-nums">
-                {activeTeacher.subjects?.length ?? 1}
-              </span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[11px]">Supervised Class</span>
-              <span className="text-sm font-semibold text-white">
-                {supervisedClasses.length > 0 ? `Class ${supervisedClasses[0].name}` : "None"}
-              </span>
-            </div>
-            <div>
-              <span className="text-zinc-500 block text-[11px]">Demographics</span>
-              <span className="text-sm font-semibold text-white">
-                {activeTeacher.sex} &bull; {activeTeacher.bloodType.replace("_", " ")}
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Teaching Schedule & Class Roster */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Weekly Teaching Schedule */}
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <div className="flex items-center justify-between">
+          {/* 4 Mini Stat Badges (2x2 grid) */}
+          <div className="xl:col-span-5 grid grid-cols-2 gap-3.5">
+            {/* 90% Attendance */}
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C3EBFA]/50 text-sky-700 dark:text-sky-300">
+                <CheckCircle2 className="h-5 w-5" />
+              </div>
               <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5 text-emerald-400" />
-                  <span>Teaching Timetable & Periods</span>
-                </CardTitle>
-                <CardDescription>
-                  Your scheduled lecture hours and classroom assignments
-                </CardDescription>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">90%</div>
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Attendance</div>
               </div>
-              <Link href="/lessons">
-                <Button variant="ghost" size="sm" className="text-xs">
-                  Full Timetable &rarr;
-                </Button>
-              </Link>
             </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {teacherLessons.length === 0 ? (
-              <div className="py-12 text-center text-xs text-zinc-500 dark:text-zinc-500">
-                No lessons assigned to this instructor currently. Schedule lessons in Timetable.
-              </div>
-            ) : (
-              <div className="divide-y divide-white/5">
-                {teacherLessons.map((lesson) => (
-                  <div
-                    key={lesson.id}
-                    className="py-3 flex items-center justify-between gap-4 transition-colors hover:bg-white/[0.02] px-2 rounded-lg"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-600/20 text-indigo-400 font-bold text-xs">
-                        {lesson.day.slice(0, 3)}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-sm text-white">{lesson.name}</h4>
-                        <div className="flex items-center gap-2 text-xs text-gray-400 mt-0.5">
-                          <span className="text-indigo-400">{lesson.subject?.name || "Subject"}</span>
-                          <span>&bull;</span>
-                          <span>Class {lesson.class?.name || "Cohort"}</span>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-1.5 text-xs text-gray-400 font-mono">
-                        <Clock className="h-3.5 w-3.5 text-zinc-500 dark:text-zinc-500" />
-                        <span>
-                          {formatTime(lesson.startTime)} - {formatTime(lesson.endTime)}
-                        </span>
-                      </div>
-                      <Link href="/attendance">
-                        <Button size="sm" variant="outline" className="h-7 text-xs">
-                          Roll Call
-                        </Button>
-                      </Link>
-                    </div>
+            {/* 2 Branches */}
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#CFCEFF]/50 text-violet-700 dark:text-violet-300">
+                <Building2 className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">2</div>
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Branches</div>
+              </div>
+            </div>
+
+            {/* 12 Lessons */}
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FAE27C]/50 text-amber-800 dark:text-amber-300">
+                <BookOpen className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">12</div>
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Lessons</div>
+              </div>
+            </div>
+
+            {/* 14 Classes */}
+            <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#CFCEFF]/50 text-violet-700 dark:text-violet-300">
+                <Layers className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">14</div>
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Classes</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Teacher's Schedule Section */}
+        <div className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white dark:bg-[#111114] p-4 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 shadow-sm">
+            <h2 className="text-lg font-bold text-zinc-900 dark:text-white font-heading">
+              Teacher&apos;s Schedule
+            </h2>
+
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-semibold text-zinc-600 dark:text-zinc-300">
+                August 19 – 23
+              </span>
+              <div className="flex items-center rounded-lg border border-zinc-200 dark:border-zinc-700 p-0.5 bg-zinc-50 dark:bg-zinc-900 text-xs">
+                <button
+                  type="button"
+                  onClick={() => setViewMode("workWeek")}
+                  className={`px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                    viewMode === "workWeek"
+                      ? "bg-[#CFCEFF] text-violet-950 shadow-sm"
+                      : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  Work Week
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode("day")}
+                  className={`px-3 py-1 rounded-md font-semibold transition-all cursor-pointer ${
+                    viewMode === "day"
+                      ? "bg-[#CFCEFF] text-violet-950 shadow-sm"
+                      : "text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+                  }`}
+                >
+                  Day
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Timetable Grid */}
+          <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm overflow-x-auto">
+            <div className="min-w-[640px]">
+              {/* Day Headers */}
+              <div className="grid grid-cols-6 border-b border-zinc-200 dark:border-zinc-800 pb-3 mb-2">
+                <div className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 pl-2">Time</div>
+                {DAYS.map((d) => (
+                  <div key={d} className="text-center text-xs font-bold text-zinc-700 dark:text-zinc-300 tracking-wider">
+                    {d}
                   </div>
                 ))}
               </div>
-            )}
-          </CardContent>
-        </Card>
 
-        {/* Supervised Class Student Roster */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Users className="h-4 w-4 text-indigo-400" />
-                  <span>Student Roster</span>
-                </CardTitle>
-                <CardDescription className="text-xs">
-                  {supervisedClasses[0] ? `Class ${supervisedClasses[0].name}` : "Enrolled Pupils"}
-                </CardDescription>
-              </div>
-              <Link href="/students">
-                <Button variant="ghost" size="sm" className="text-xs">
-                  View All
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {studentsData?.data && studentsData.data.length > 0 ? (
-              studentsData.data.slice(0, 6).map((st) => (
-                <div
-                  key={st.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-colors"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Avatar className="h-8 w-8 border border-zinc-200 dark:border-zinc-800">
-                      <AvatarFallback className="text-[11px]">
-                        {st.name[0]}
-                        {st.surname[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <div className="font-semibold text-xs text-white">
-                        {st.name} {st.surname}
+              {/* Time Slot Rows */}
+              <div className="space-y-1.5">
+                {TIME_SLOTS.map((time) => {
+                  const row = DEFAULT_TEACHER_SCHEDULE[time];
+                  return (
+                    <div key={time} className="grid grid-cols-6 items-stretch gap-2 min-h-[64px] border-b border-zinc-100 dark:border-zinc-900/60 pb-1.5">
+                      <div className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 pt-2 pl-2">
+                        {time}
                       </div>
-                      <div className="text-[10px] text-zinc-500 dark:text-zinc-500 font-mono">
-                        @{st.username}
-                      </div>
+
+                      {DAYS.map((day) => {
+                        const lesson = row ? row[day] : null;
+                        if (!lesson) {
+                          return <div key={day} className="rounded-xl bg-transparent" />;
+                        }
+
+                        const colors = getScheduleColor(lesson.name);
+                        return (
+                          <div
+                            key={day}
+                            className={`rounded-xl ${colors.bg} ${colors.darkBg} p-2.5 flex flex-col justify-center transition-all hover:scale-[1.02] hover:shadow-sm cursor-pointer`}
+                          >
+                            <span className="text-[10px] font-mono text-zinc-600/90 dark:text-zinc-400/90 leading-tight">
+                              {lesson.time}
+                            </span>
+                            <span className={`text-xs font-bold ${colors.text} ${colors.darkText} leading-snug mt-0.5 truncate`}>
+                              {lesson.name}
+                            </span>
+                          </div>
+                        );
+                      })}
                     </div>
-                  </div>
-                  <Badge variant="secondary" className="text-[10px]">
-                    Class {st.class?.name}
-                  </Badge>
-                </div>
-              ))
-            ) : (
-              <div className="py-8 text-center text-xs text-zinc-500 dark:text-zinc-500">
-                No students enrolled in this class yet.
+                  );
+                })}
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Quick Grading & Assessment Shortcuts */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Exams to Grade */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <FileSpreadsheet className="h-4 w-4 text-indigo-400" />
-                <span>Scheduled Examinations</span>
-              </CardTitle>
-              <Link href="/exams">
-                <Button variant="ghost" size="sm" className="text-xs">
-                  Manage &rarr;
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {examsData?.data && examsData.data.length > 0 ? (
-              examsData.data.slice(0, 3).map((ex) => (
-                <div
-                  key={ex.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-gray-900/40 text-xs"
-                >
-                  <div>
-                    <span className="font-semibold text-gray-200">{ex.title}</span>
-                    <div className="text-[11px] text-zinc-500 dark:text-zinc-500 font-mono">
-                      {formatDate(ex.startTime)}
-                    </div>
-                  </div>
-                  <Link href="/results">
-                    <Button size="sm" variant="outline" className="h-7 text-xs">
-                      Enter Scores
-                    </Button>
-                  </Link>
-                </div>
-              ))
-            ) : (
-              <div className="text-xs text-zinc-500 dark:text-zinc-500 py-4 text-center">
-                No examinations pending grade entry.
-              </div>
-            )}
-          </CardContent>
-        </Card>
+      {/* ────────────────── RIGHT COLUMN: Shortcuts, Performance, Announcements ────────────────── */}
+      <div className="w-full lg:w-80 shrink-0 space-y-6">
+        {/* Shortcuts Section */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-5 shadow-sm space-y-3">
+          <h3 className="text-base font-bold text-zinc-900 dark:text-white">Shortcuts</h3>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/classes"
+              className="px-3 py-1.5 rounded-lg bg-[#C3EBFA] dark:bg-sky-950/60 text-sky-900 dark:text-sky-200 text-xs font-semibold hover:opacity-80 transition-opacity"
+            >
+              Teacher&apos;s Classes
+            </Link>
+            <Link
+              href="/students"
+              className="px-3 py-1.5 rounded-lg bg-[#CFCEFF] dark:bg-violet-950/60 text-violet-950 dark:text-violet-200 text-xs font-semibold hover:opacity-80 transition-opacity"
+            >
+              Teacher&apos;s Students
+            </Link>
+            <Link
+              href="/lessons"
+              className="px-3 py-1.5 rounded-lg bg-[#FAE27C] dark:bg-amber-950/60 text-amber-950 dark:text-amber-200 text-xs font-semibold hover:opacity-80 transition-opacity"
+            >
+              Teacher&apos;s Lessons
+            </Link>
+            <Link
+              href="/exams"
+              className="px-3 py-1.5 rounded-lg bg-[#FDD2D8] dark:bg-rose-950/60 text-rose-950 dark:text-rose-200 text-xs font-semibold hover:opacity-80 transition-opacity"
+            >
+              Teacher&apos;s Exams
+            </Link>
+            <Link
+              href="/assignments"
+              className="px-3 py-1.5 rounded-lg bg-[#C3EBFA] dark:bg-sky-950/60 text-sky-900 dark:text-sky-200 text-xs font-semibold hover:opacity-80 transition-opacity"
+            >
+              Teacher&apos;s Assignments
+            </Link>
+          </div>
+        </div>
 
-        {/* Assignments */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <CardTitle className="text-base flex items-center gap-2">
-                <ClipboardList className="h-4 w-4 text-violet-400" />
-                <span>Coursework Assignments</span>
-              </CardTitle>
-              <Link href="/assignments">
-                <Button variant="ghost" size="sm" className="text-xs">
-                  Manage &rarr;
-                </Button>
-              </Link>
-            </div>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {assignmentsData?.data && assignmentsData.data.length > 0 ? (
-              assignmentsData.data.slice(0, 3).map((asg) => (
-                <div
-                  key={asg.id}
-                  className="flex items-center justify-between p-3 rounded-lg border border-white/5 bg-gray-900/40 text-xs"
-                >
-                  <div>
-                    <span className="font-semibold text-gray-200">{asg.title}</span>
-                    <div className="text-[11px] text-amber-400 font-mono">
-                      Due {formatDate(asg.dueDate)}
-                    </div>
-                  </div>
-                  <Link href="/results">
-                    <Button size="sm" variant="outline" className="h-7 text-xs">
-                      Grade Submissions
-                    </Button>
-                  </Link>
+        {/* Performance Gauge Section */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-bold text-zinc-900 dark:text-white">Performance</h3>
+            <button type="button" className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors cursor-pointer">
+              <MoreHorizontal className="h-4 w-4" />
+            </button>
+          </div>
+
+          <div className="flex flex-col items-center justify-center py-2">
+            {/* Half-donut Arc SVG */}
+            <div className="relative w-44 h-24 flex items-end justify-center">
+              <svg viewBox="0 0 100 50" className="w-full h-full">
+                {/* Background arc */}
+                <path
+                  d="M 10,50 A 40,40 0 0,1 90,50"
+                  fill="none"
+                  stroke="#e4e4e7"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                  className="dark:stroke-zinc-800"
+                />
+                {/* Gauge fill arc (92%) */}
+                <path
+                  d="M 10,50 A 40,40 0 0,1 84,28"
+                  fill="none"
+                  stroke="#C3EBFA"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M 84,28 A 40,40 0 0,1 88,42"
+                  fill="none"
+                  stroke="#FAE27C"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                />
+              </svg>
+              <div className="absolute bottom-0 text-center">
+                <div className="text-2xl font-bold text-zinc-900 dark:text-white leading-none">
+                  9.2
                 </div>
-              ))
+                <div className="text-[10px] text-zinc-400 font-medium mt-0.5">
+                  of 10 max LTS
+                </div>
+              </div>
+            </div>
+
+            <p className="mt-4 text-xs font-semibold text-zinc-700 dark:text-zinc-300 text-center">
+              1st Semester – 2nd Semester
+            </p>
+          </div>
+        </div>
+
+        {/* Announcements Section */}
+        <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-5 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-bold text-zinc-900 dark:text-white">Announcements</h3>
+            <Link href="/announcements" className="text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white transition-colors">
+              View All
+            </Link>
+          </div>
+          <div className="space-y-3">
+            {announcements.length > 0 ? (
+              announcements.map((ann: any, idx: number) => {
+                const colors = ["bg-[#C3EBFA]", "bg-[#CFCEFF]", "bg-[#FAE27C]"];
+                return (
+                  <div
+                    key={ann.id}
+                    className={`rounded-xl ${colors[idx % colors.length]} dark:bg-zinc-800/60 p-3.5 space-y-1`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <h4 className="text-xs font-bold text-zinc-900 dark:text-white line-clamp-1">
+                        {ann.title}
+                      </h4>
+                      <span className="text-[10px] text-zinc-500/80 dark:text-zinc-400 font-mono shrink-0">
+                        {formatDate(ann.date)}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-zinc-700/80 dark:text-zinc-300/80 line-clamp-2 leading-relaxed">
+                      {ann.description}
+                    </p>
+                  </div>
+                );
+              })
             ) : (
-              <div className="text-xs text-zinc-500 dark:text-zinc-500 py-4 text-center">
-                No assignments active.
+              <div className="space-y-3">
+                <div className="rounded-xl bg-[#C3EBFA] dark:bg-sky-950/40 p-3.5 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white">About 4A Math Test</h4>
+                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">2025-01-02</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-700/90 dark:text-zinc-300/80 leading-relaxed">
+                    The Math test scheduled for 2nd January has been cancelled. A new date will be announced soon.
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[#CFCEFF] dark:bg-violet-950/40 p-3.5 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white">Field Trip Rescheduled</h4>
+                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">2025-01-05</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-700/90 dark:text-zinc-300/80 leading-relaxed">
+                    The field trip to London has been rescheduled. Please check back for the new date and further instructions.
+                  </p>
+                </div>
+                <div className="rounded-xl bg-[#FAE27C] dark:bg-amber-950/40 p-3.5 space-y-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <h4 className="text-xs font-bold text-zinc-900 dark:text-white">Sports Day Update</h4>
+                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400 font-mono">2025-01-08</span>
+                  </div>
+                  <p className="text-[11px] text-zinc-700/90 dark:text-zinc-300/80 leading-relaxed">
+                    The Sports Day event originally set for 8th January has been cancelled. Stay tuned for updates on the rescheduled date.
+                  </p>
+                </div>
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -327,32 +327,48 @@ export default function PublicPortalPage() {
       </section>
 
       {/* Academic Departments Showcase */}
-      <section id="departments" className="py-12 px-6 md:px-12 max-w-5xl mx-auto w-full">
-        <div className="text-center space-y-1 mb-8">
-          <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
+      <section id="departments" className="py-16 md:py-20 px-6 md:px-12 max-w-6xl mx-auto w-full">
+        <div className="text-center space-y-2 mb-10 max-w-2xl mx-auto">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white font-heading">
             Academic Curriculums
           </h2>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Comprehensive learning departments structured from elementary through high school
+          <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+            Comprehensive learning departments structured from elementary through advanced collegiate levels
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {academicDepartments.map((dept, idx) => {
             const Icon = dept.icon;
             return (
               <div
                 key={idx}
-                className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md space-y-2 shadow-sm hover:border-zinc-300 dark:hover:border-white/20 transition-all"
+                className="group flex flex-col justify-between p-6 md:p-7 min-h-[260px] rounded-2xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md shadow-lg shadow-black/5 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/15 dark:hover:bg-black/45 hover:-translate-y-1.5 transition-all duration-300 select-none"
               >
-                <div className="flex items-center justify-between">
-                  <div className="h-8 w-8 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-[#991b2e] dark:text-[#f43f5e]">
-                    <Icon className="h-4 w-4" />
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-200/80 dark:border-zinc-700/60 bg-white/40 dark:bg-zinc-900/60 text-[#991b2e] dark:text-[#f43f5e] shadow-sm group-hover:scale-110 group-hover:bg-[#991b2e] group-hover:text-white transition-all duration-300">
+                      <Icon className="h-6 w-6" />
+                    </div>
+                    <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-zinc-200/60 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-300 border border-zinc-300/40 dark:border-zinc-700/60">
+                      {dept.code}
+                    </span>
                   </div>
-                  <span className="text-[10px] font-mono text-zinc-400">{dept.code}</span>
+
+                  <div className="space-y-2">
+                    <h3 className="text-base md:text-lg font-bold text-zinc-900 dark:text-white font-heading group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors leading-snug">
+                      {dept.name}
+                    </h3>
+                    <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                      {dept.desc}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-xs font-semibold text-zinc-900 dark:text-white">{dept.name}</h3>
-                <p className="text-[11px] text-zinc-500 leading-relaxed">{dept.desc}</p>
+
+                <div className="pt-4 mt-auto border-t border-zinc-200/50 dark:border-white/10 flex items-center justify-between text-xs font-semibold text-[#991b2e] dark:text-[#f43f5e]">
+                  <span>Explore Curriculum</span>
+                  <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
               </div>
             );
           })}
