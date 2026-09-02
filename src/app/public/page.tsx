@@ -220,6 +220,100 @@ export default function PublicPortalPage() {
         </div>
       </header>
 
+      {/* ── User View Panel ─────────────────────────────── */}
+      <section className="relative py-10 px-6 md:px-12 max-w-5xl mx-auto w-full">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Welcome Panel */}
+          <div className="md:col-span-2 p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white/90 dark:bg-[#111114]/90 backdrop-blur-xl shadow-sm space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/20">
+                <School className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="text-base md:text-lg font-bold tracking-tight text-zinc-900 dark:text-white font-heading">
+                  Welcome to School Sphere
+                </h2>
+                <p className="text-[11px] text-zinc-500 dark:text-zinc-400">
+                  Your campus gateway — explore departments, events, and academic resources
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+              {[
+                { label: "Active Scholars", value: totalStudents, icon: Users, color: "text-blue-600 dark:text-blue-400" },
+                { label: "Expert Faculty", value: totalTeachers, icon: UserCheck, color: "text-emerald-600 dark:text-emerald-400" },
+                { label: "Class Cohorts", value: totalClasses, icon: Layers, color: "text-amber-600 dark:text-amber-400" },
+                { label: "Subject Areas", value: totalSubjects, icon: BookOpen, color: "text-purple-600 dark:text-purple-400" },
+              ].map((item, idx) => {
+                const Icon = item.icon;
+                return (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-2.5 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/80 dark:bg-zinc-900/50"
+                  >
+                    <Icon className={`h-4 w-4 shrink-0 ${item.color}`} />
+                    <div>
+                      <div className="text-sm font-bold text-zinc-900 dark:text-white tabular-nums">{item.value}</div>
+                      <div className="text-[10px] text-zinc-500 leading-none">{item.label}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Quick Actions Panel */}
+          <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white/90 dark:bg-[#111114]/90 backdrop-blur-xl shadow-sm space-y-4">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500 flex items-center gap-1.5">
+              <Sparkles className="h-3 w-3 text-blue-500" />
+              Quick Access
+            </h3>
+
+            <div className="space-y-2">
+              <Link href="/login" className="group">
+                <div className="flex items-center gap-3 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/60 dark:bg-zinc-900/40 hover:border-blue-200 dark:hover:border-blue-800/50 hover:bg-blue-50/50 dark:hover:bg-blue-900/10 transition-all">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400">
+                    <Shield className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-zinc-900 dark:text-white">Sign In to Workspace</div>
+                    <div className="text-[10px] text-zinc-500">Access your personal dashboard</div>
+                  </div>
+                  <ArrowRight className="h-3 w-3 text-zinc-400 group-hover:text-blue-500 group-hover:translate-x-0.5 transition-all" />
+                </div>
+              </Link>
+
+              <a href="#portals" className="group block">
+                <div className="flex items-center gap-3 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/60 dark:bg-zinc-900/40 hover:border-emerald-200 dark:hover:border-emerald-800/50 hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+                    <Compass className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-zinc-900 dark:text-white">Explore Portals</div>
+                    <div className="text-[10px] text-zinc-500">Student, Teacher, Parent & Admin</div>
+                  </div>
+                  <ArrowRight className="h-3 w-3 text-zinc-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all" />
+                </div>
+              </a>
+
+              <a href="#bulletin" className="group block">
+                <div className="flex items-center gap-3 p-2.5 rounded-xl border border-zinc-100 dark:border-zinc-800/60 bg-zinc-50/60 dark:bg-zinc-900/40 hover:border-amber-200 dark:hover:border-amber-800/50 hover:bg-amber-50/50 dark:hover:bg-amber-900/10 transition-all">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-50 dark:bg-amber-500/10 text-amber-600 dark:text-amber-400">
+                    <Megaphone className="h-3.5 w-3.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-semibold text-zinc-900 dark:text-white">Campus Bulletins</div>
+                    <div className="text-[10px] text-zinc-500">News, events & announcements</div>
+                  </div>
+                  <ArrowRight className="h-3 w-3 text-zinc-400 group-hover:text-amber-500 group-hover:translate-x-0.5 transition-all" />
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Hero Section */}
       <section id="overview" className="relative py-20 px-6 md:px-12 text-center max-w-4xl mx-auto space-y-5">
         <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400 shadow-sm">
