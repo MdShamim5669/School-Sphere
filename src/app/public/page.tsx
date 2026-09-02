@@ -32,6 +32,7 @@ import { ThemeToggle } from "@/components/ui/theme-toggle";
 import DashboardFooter from "@/components/layout/dashboard-footer";
 import FAQSection from "@/components/shared/faq-section";
 import EventsShowcase from "@/components/shared/events-showcase";
+import TestimonialsSection from "@/components/shared/testimonials-section";
 import { formatDate, formatDateTime } from "@/lib/utils";
 
 export default function PublicPortalPage() {
@@ -196,6 +197,9 @@ export default function PublicPortalPage() {
           <a href="#bulletin" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
             Bulletin & Events
           </a>
+          <a href="#testimonials" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
+            Testimonials
+          </a>
           <a href="#faq" className="hover:text-zinc-900 dark:hover:text-white transition-colors">
             FAQs
           </a>
@@ -359,41 +363,66 @@ export default function PublicPortalPage() {
       <EventsShowcase />
 
       {/* Campus Bulletin Notices */}
-      <section id="bulletin" className="py-12 px-6 md:px-12 max-w-5xl mx-auto w-full">
-        <div className="space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-zinc-200 dark:border-zinc-800">
-            <div className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-zinc-100 dark:bg-zinc-800 text-[#991b2e] dark:text-[#f43f5e]">
-                <Megaphone className="h-4 w-4" />
+      <section id="bulletin" className="py-16 md:py-20 px-6 md:px-12 max-w-6xl mx-auto w-full">
+        <div className="space-y-6">
+          <div className="flex items-center justify-between pb-4 border-b border-zinc-200/80 dark:border-white/10">
+            <div className="flex items-center gap-3">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 text-[#991b2e] dark:text-[#f43f5e] shadow-sm">
+                <Megaphone className="h-4.5 w-4.5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-zinc-900 dark:text-white tracking-tight font-heading">
+                <h3 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white tracking-tight font-heading">
                   Official Campus Bulletins & Announcements
                 </h3>
-                <p className="text-xs text-zinc-500">Live institutional updates and schedule notices</p>
+                <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Live institutional updates and schedule notices</p>
               </div>
             </div>
-            <Link href="/announcements" className="text-xs text-[#991b2e] dark:text-[#f43f5e] hover:underline">
-              View All Bulletins &rarr;
+            <Link href="/announcements" className="text-xs md:text-sm font-semibold text-[#991b2e] dark:text-[#f43f5e] hover:underline flex items-center gap-1">
+              <span>View All Bulletins</span>
+              <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {displayedAnnouncements.map((an: any) => (
               <div
                 key={an.id}
-                className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md space-y-2 shadow-sm hover:border-zinc-300 dark:hover:border-white/20 transition-colors"
+                className="group flex flex-col justify-between p-6 md:p-7 min-h-[220px] rounded-2xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md shadow-lg shadow-black/5 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/15 dark:hover:bg-black/45 hover:-translate-y-1 transition-all duration-300"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="font-semibold text-xs text-zinc-900 dark:text-white line-clamp-1">{an.title}</span>
-                  <span className="text-[10px] text-zinc-400 font-mono shrink-0">{formatDate(an.date)}</span>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between gap-3">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#991b2e]/10 dark:bg-[#be123c]/20 px-3 py-1 text-[11px] font-semibold text-[#991b2e] dark:text-[#f43f5e] border border-[#991b2e]/20">
+                      <Calendar className="h-3 w-3" />
+                      <span>{formatDate(an.date)}</span>
+                    </span>
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                      Notice
+                    </span>
+                  </div>
+
+                  <h4 className="font-heading text-base md:text-lg font-bold text-zinc-900 dark:text-white group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors leading-snug line-clamp-2">
+                    {an.title}
+                  </h4>
+
+                  <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-4">
+                    {an.description}
+                  </p>
                 </div>
-                <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-3 leading-relaxed">{an.description}</p>
+
+                <div className="pt-4 mt-auto border-t border-zinc-200/50 dark:border-white/10 flex items-center justify-between">
+                  <span className="text-xs font-semibold text-[#991b2e] dark:text-[#f43f5e] inline-flex items-center gap-1.5 group-hover:underline">
+                    <span>Read Bulletin</span>
+                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
+
+      {/* Voices of School Sphere Testimonials Marquee */}
+      <TestimonialsSection />
 
       {/* FAQ & Knowledge Section ready for RAG system */}
       <FAQSection />
