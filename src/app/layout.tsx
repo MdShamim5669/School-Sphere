@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
 import AppProviders from "@/providers/query-provider";
+import CinematicBackground from "@/components/ui/cinematic-background";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -34,9 +35,12 @@ export default function RootLayout({
       className={`h-full ${plusJakarta.variable} ${inter.variable}`}
     >
       <body
-        className={`${inter.className} min-h-full bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-blue-500/20`}
+        className={`${inter.className} min-h-full bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-blue-500/20 relative`}
       >
-        <AppProviders>{children}</AppProviders>
+        <AppProviders>
+          <CinematicBackground />
+          {children}
+        </AppProviders>
       </body>
     </html>
   );
