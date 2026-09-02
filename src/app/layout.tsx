@@ -35,11 +35,11 @@ export default function RootLayout({
       className={`h-full ${plusJakarta.variable} ${inter.variable}`}
     >
       <body
-        className={`${inter.className} min-h-full bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 antialiased selection:bg-blue-500/20 relative`}
+        className={`${inter.className} min-h-full bg-zinc-950 text-zinc-900 dark:text-zinc-100 antialiased selection:bg-blue-500/20 relative`}
       >
         <AppProviders>
           <CinematicBackground />
-          {children}
+          <div className="relative z-10">{children}</div>
         </AppProviders>
       </body>
     </html>

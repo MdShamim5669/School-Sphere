@@ -165,7 +165,7 @@ export default function PublicPortalPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-50 dark:bg-[#09090b] text-zinc-900 dark:text-zinc-100 flex flex-col transition-colors select-none scroll-smooth">
+    <div className="min-h-screen bg-transparent text-zinc-900 dark:text-zinc-100 flex flex-col transition-colors select-none scroll-smooth">
       {/* Navigation Bar */}
       <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b border-zinc-200 dark:border-zinc-800/80 bg-white/95 dark:bg-[#0c0c0e]/95 backdrop-blur-md px-6 md:px-12 transition-colors">
         <div className="flex items-center gap-2.5">
