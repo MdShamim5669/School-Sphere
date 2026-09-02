@@ -90,7 +90,7 @@ export default function FAQSection() {
           {/* RAG System Query Container */}
           <div className="pt-2">
             <form onSubmit={handleRagSearch} className="space-y-2">
-              <div className="relative flex items-center rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-[#111114] p-1.5 shadow-sm focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/10 transition-all">
+              <div className="relative flex items-center rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/15 dark:bg-black/35 backdrop-blur-md p-1.5 shadow-sm focus-within:border-[#991b2e] dark:focus-within:border-[#be123c] focus-within:ring-2 focus-within:ring-rose-500/10 transition-all">
                 <Search className="h-4 w-4 text-zinc-400 ml-2.5 shrink-0" />
                 <input
                   type="text"
@@ -121,14 +121,14 @@ export default function FAQSection() {
             return (
               <div
                 key={faq.id}
-                className="overflow-hidden rounded-xl border border-zinc-200/80 dark:border-zinc-800/80 bg-zinc-50 dark:bg-[#121215] transition-colors"
+                className="overflow-hidden rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md transition-colors"
               >
                 <button
                   type="button"
                   onClick={() => toggleItem(faq.id)}
                   className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer group"
                 >
-                  <span className="font-heading text-sm md:text-base font-semibold text-zinc-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  <span className="font-heading text-sm md:text-base font-semibold text-zinc-900 dark:text-white group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors">
                     {faq.question}
                   </span>
                   <div className="shrink-0 flex h-6 w-6 items-center justify-center rounded-md text-zinc-600 dark:text-zinc-300">

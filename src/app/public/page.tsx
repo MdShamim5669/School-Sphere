@@ -261,7 +261,7 @@ export default function PublicPortalPage() {
             return (
               <div
                 key={idx}
-                className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] text-center shadow-sm dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.04)]"
+                className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/15 dark:bg-black/30 backdrop-blur-md text-center shadow-sm"
               >
                 <div className="flex justify-center mb-1 text-zinc-400">
                   <Icon className="h-4 w-4" />
@@ -292,7 +292,7 @@ export default function PublicPortalPage() {
             const Icon = portal.icon;
             return (
               <Link key={idx} href={portal.link}>
-                <Card className="hover:border-zinc-300 dark:hover:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-[#141418] transition-all group cursor-pointer h-full">
+                <Card className="bg-white/10 dark:bg-black/35 backdrop-blur-md border-zinc-200/80 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/20 dark:hover:bg-black/50 transition-all group cursor-pointer h-full">
                   <CardHeader className="pb-3">
                     <div className="flex items-center justify-between">
                       <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 group-hover:text-[#991b2e] dark:group-hover:text-white transition-colors">
@@ -339,7 +339,7 @@ export default function PublicPortalPage() {
             return (
               <div
                 key={idx}
-                className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] space-y-2 shadow-sm"
+                className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md space-y-2 shadow-sm hover:border-zinc-300 dark:hover:border-white/20 transition-all"
               >
                 <div className="flex items-center justify-between">
                   <div className="h-8 w-8 rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 flex items-center justify-center text-[#991b2e] dark:text-[#f43f5e]">
@@ -382,7 +382,7 @@ export default function PublicPortalPage() {
             {displayedAnnouncements.map((an: any) => (
               <div
                 key={an.id}
-                className="p-4 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] space-y-2 shadow-sm hover:border-zinc-300 dark:hover:border-zinc-700 transition-colors"
+                className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md space-y-2 shadow-sm hover:border-zinc-300 dark:hover:border-white/20 transition-colors"
               >
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold text-xs text-zinc-900 dark:text-white line-clamp-1">{an.title}</span>
@@ -399,7 +399,7 @@ export default function PublicPortalPage() {
       <FAQSection />
 
       {/* Footer matching user reference design */}
-      <div className="max-w-5xl mx-auto w-full px-6 md:px-12 mt-8">
+      <div className="w-full max-w-[1480px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 mt-8">
         <DashboardFooter />
       </div>
     </div>
