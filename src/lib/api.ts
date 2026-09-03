@@ -1,8 +1,21 @@
 import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
-const API_BASE_URL =
+let rawBaseUrl = (
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://school-sphere-server.onrender.com/api/v1";
+  "https://school-sphere-server.onrender.com/api/v1"
+).trim();
+
+// Strip trailing slash
+if (rawBaseUrl.endsWith("/")) {
+  rawBaseUrl = rawBaseUrl.slice(0, -1);
+}
+
+// Automatically append /api/v1 if domain was configured without it
+if (!rawBaseUrl.includes("/api/v1")) {
+  rawBaseUrl = `${rawBaseUrl}/api/v1`;
+}
+
+export const API_BASE_URL = rawBaseUrl;
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -78,6 +91,9 @@ export function getErrorMessage(error: unknown): string {
     if (errData?.message) return errData.message;
     if (errData?.errorSources && errData.errorSources.length > 0) {
       return errData.errorSources.map((s: { message: string }) => s.message).join(", ");
+    }
+    if (error.message === "Network Error" || !error.response) {
+      return "Network Error: Unable to reach backend server. Please verify backend status and CORS configuration.";
     }
     return error.message || "An unexpected network error occurred";
   }

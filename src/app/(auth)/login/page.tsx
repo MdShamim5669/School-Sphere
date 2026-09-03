@@ -19,6 +19,7 @@ import { toast } from "sonner";
 import { useAuth } from "@/context/auth-context";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { getErrorMessage } from "@/lib/api";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("admin");
@@ -35,7 +36,7 @@ export default function LoginPage() {
       await login({ username, password }, activeRole);
       toast.success("Successfully authenticated");
     } catch (err: any) {
-      toast.error(err.message || "Authentication failed. Check credentials or backend connection.");
+      toast.error(getErrorMessage(err));
     } finally {
       setLoading(false);
     }
