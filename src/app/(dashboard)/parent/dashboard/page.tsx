@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   AlertTriangle,
 } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 import { useParents } from "@/hooks/use-parents";
 import { useStudents } from "@/hooks/use-students";
 import { useAttendance } from "@/hooks/use-attendance";
@@ -29,13 +30,16 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { formatDate } from "@/lib/utils";
 
 export default function ParentDashboardPage() {
-  const { data: parentsData } = useParents({ limit: 50 });
+  const { user } = useAuth();
+  const { data: parentsData, isLoading: isParentsLoading } = useParents({ limit: 50 });
   const [selectedParentId, setSelectedParentId] = useState<string>("");
   const [selectedChildIndex, setSelectedChildIndex] = useState<number>(0);
 
   const parents = parentsData?.data || [];
   const activeParent =
-    parents.find((p) => p.id === selectedParentId) || parents[0];
+    (selectedParentId ? parents.find((p) => p.id === selectedParentId) : null) ||
+    parents.find((p) => p.username === user?.username || p.id === user?.id) ||
+    parents[0];
 
   // Fetch students for this parent
   const { data: studentsData } = useStudents({

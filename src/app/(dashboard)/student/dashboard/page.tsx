@@ -11,10 +11,12 @@ import {
   MoreHorizontal,
   ChevronDown,
 } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 import { useStudents } from "@/hooks/use-students";
 import { useLessons } from "@/hooks/use-lessons";
 import { useEvents, useAnnouncements } from "@/hooks/use-notices";
 import { formatDate } from "@/lib/utils";
+import { buildScheduleMatrix, TIME_SLOTS, DAYS } from "@/lib/schedule-utils";
 
 // ─── Pastel Block Colors for Schedule ───
 const LESSON_COLORS: Record<string, { bg: string; darkBg: string; text: string; darkText: string }> = {
@@ -37,20 +39,6 @@ function getLessonColor(subjectName: string) {
   return { bg: "bg-[#C3EBFA]", darkBg: "dark:bg-sky-950/60", text: "text-sky-900", darkText: "dark:text-sky-200" };
 }
 
-// ─── Schedule Grid Structure ───
-const TIME_SLOTS = [
-  "8:00 AM",
-  "9:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "1:00 PM",
-  "2:00 PM",
-  "3:00 PM",
-];
-
-const DAYS = ["MON", "TUE", "WED", "THU", "FRI"];
-
 // ─── Calendar Helper ───
 function getCalendarDays(year: number, month: number) {
   const firstDay = new Date(year, month, 1);
@@ -72,12 +60,16 @@ const MONTH_NAMES = [
 const DAY_HEADERS = ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"];
 
 export default function StudentDashboardPage() {
-  const { data: studentsData } = useStudents({ limit: 50 });
+  const { user } = useAuth();
+  const { data: studentsData, isLoading: isStudentsLoading } = useStudents({ limit: 50 });
   const [selectedStudentId, setSelectedStudentId] = useState<string>("");
   const [viewMode, setViewMode] = useState<"workWeek" | "day">("workWeek");
 
   const students = studentsData?.data || [];
-  const activeStudent = students.find((s) => s.id === selectedStudentId) || students[0];
+  const activeStudent =
+    (selectedStudentId ? students.find((s) => s.id === selectedStudentId) : null) ||
+    students.find((s) => s.username === user?.username || s.id === user?.id) ||
+    students[0];
 
   const { data: lessonsData } = useLessons({
     classId: activeStudent?.classId,
@@ -163,6 +155,7 @@ export default function StudentDashboardPage() {
     },
   };
 
+  const scheduleMatrix = buildScheduleMatrix(lessonsData?.data, defaultSchedule);
   const className = activeStudent?.class?.name || "4A";
   const events = eventsData?.data?.slice(0, 3) || [];
   const announcements = announcementsData?.data?.slice(0, 3) || [];
@@ -243,7 +236,7 @@ export default function StudentDashboardPage() {
             {/* Time Slot Rows */}
             <div className="space-y-1.5">
               {TIME_SLOTS.map((time) => {
-                const row = defaultSchedule[time];
+                const row = scheduleMatrix[time];
                 return (
                   <div key={time} className="grid grid-cols-6 items-stretch gap-2 min-h-[64px] border-b border-zinc-100 dark:border-zinc-900/60 pb-1.5">
                     {/* Time Label */}

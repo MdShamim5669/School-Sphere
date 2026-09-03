@@ -19,12 +19,14 @@ import {
   CheckCircle2,
   ChevronDown,
 } from "lucide-react";
+import { useAuth } from "@/context/auth-context";
 import { useTeachers } from "@/hooks/use-teachers";
 import { useLessons } from "@/hooks/use-lessons";
 import { useClasses } from "@/hooks/use-academic";
 import { useStudents } from "@/hooks/use-students";
 import { useAnnouncements } from "@/hooks/use-notices";
 import { formatDate } from "@/lib/utils";
+import { buildScheduleMatrix, TIME_SLOTS, DAYS } from "@/lib/schedule-utils";
 
 // ─── Lesson Colors ───
 const LESSON_COLORS: Record<string, { bg: string; darkBg: string; text: string; darkText: string }> = {
@@ -42,20 +44,6 @@ function getScheduleColor(name: string) {
   }
   return { bg: "bg-[#CFCEFF]", darkBg: "dark:bg-violet-950/60", text: "text-violet-950", darkText: "dark:text-violet-200" };
 }
-
-const TIME_SLOTS = [
-  "8:00 AM",
-  "9:00 AM",
-  "10:00 AM",
-  "11:00 AM",
-  "12:00 PM",
-  "1:00 PM",
-  "2:00 PM",
-  "3:00 PM",
-  "4:00 PM",
-];
-
-const DAYS = ["MON", "TUE", "WED", "THU", "FRI"];
 
 // Reference teacher schedule mapping
 const DEFAULT_TEACHER_SCHEDULE: Record<string, Record<string, { name: string; time: string } | null>> = {
@@ -125,24 +113,35 @@ const DEFAULT_TEACHER_SCHEDULE: Record<string, Record<string, { name: string; ti
 };
 
 export default function TeacherDashboardPage() {
-  const { data: teachersData } = useTeachers({ limit: 50 });
+  const { user } = useAuth();
+  const { data: teachersData, isLoading: isTeachersLoading } = useTeachers({ limit: 50 });
   const [selectedTeacherId, setSelectedTeacherId] = useState<string>("");
   const [viewMode, setViewMode] = useState<"workWeek" | "day">("workWeek");
 
   const teachers = teachersData?.data || [];
-  const activeTeacher = teachers.find((t) => t.id === selectedTeacherId) || teachers[0];
+  const activeTeacher =
+    (selectedTeacherId ? teachers.find((t) => t.id === selectedTeacherId) : null) ||
+    teachers.find((t) => t.username === user?.username || t.id === user?.id) ||
+    teachers[0];
 
-  const { data: lessonsData } = useLessons({
+  const { data: lessonsData, isLoading: isLessonsLoading } = useLessons({
     teacherId: activeTeacher?.id,
     limit: 100,
   });
   const { data: classesData } = useClasses({ limit: 100 });
   const { data: announcementsData } = useAnnouncements({ limit: 4 });
 
-  const teacherName = activeTeacher ? `${activeTeacher.name} ${activeTeacher.surname}` : "Dean Guerrero";
-  const teacherEmail = activeTeacher?.email || "dean@gmail.com";
-  const teacherPhone = activeTeacher?.phone || "+1 543 235 64";
+  const scheduleMatrix = buildScheduleMatrix(lessonsData?.data, DEFAULT_TEACHER_SCHEDULE);
+  const teacherName = activeTeacher ? `${activeTeacher.name} ${activeTeacher.surname}` : "Faculty Instructor";
+  const teacherEmail = activeTeacher?.email || "instructor@schoolsphere.edu";
+  const teacherPhone = activeTeacher?.phone || "No phone registered";
   const announcements = announcementsData?.data?.slice(0, 3) || [];
+
+  const totalLessons = lessonsData?.meta?.total ?? lessonsData?.data?.length ?? 0;
+  const totalClasses = activeTeacher?.supervisedClasses?.length || classesData?.data?.length || 0;
+  const totalSubjects = activeTeacher?.subjects?.length || 1;
+  const bloodType = activeTeacher?.bloodType ? activeTeacher.bloodType.replace("_", " ") : "O+";
+  const joinDate = activeTeacher?.createdAt ? formatDate(activeTeacher.createdAt) : "Active Faculty";
 
   return (
     <div className="flex flex-col lg:flex-row gap-6 min-h-[calc(100vh-8rem)]">
@@ -154,21 +153,30 @@ export default function TeacherDashboardPage() {
           <div className="xl:col-span-7 rounded-2xl bg-[#C3EBFA] dark:bg-sky-950/40 border border-sky-200/80 dark:border-sky-800/40 p-5 md:p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center gap-5">
             {/* Avatar Headshot */}
             <div className="relative shrink-0">
-              <div className="h-20 w-20 md:h-24 md:w-24 rounded-full overflow-hidden border-2 border-white dark:border-zinc-800 shadow-md bg-white">
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80"
-                  alt={teacherName}
-                  className="h-full w-full object-cover"
-                />
+              <div className="h-20 w-20 md:h-24 md:w-24 rounded-full overflow-hidden border-2 border-white dark:border-zinc-800 shadow-md bg-white flex items-center justify-center font-bold text-xl text-sky-800">
+                {activeTeacher?.img ? (
+                  <img
+                    src={activeTeacher.img}
+                    alt={teacherName}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span>{activeTeacher?.name?.[0] || "T"}{activeTeacher?.surname?.[0] || ""}</span>
+                )}
               </div>
             </div>
 
             {/* Profile Info */}
             <div className="space-y-2 flex-1 min-w-0">
               <div className="flex items-center justify-between gap-2">
-                <h2 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white font-heading truncate">
-                  {teacherName}
-                </h2>
+                <div className="min-w-0">
+                  <h2 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white font-heading truncate">
+                    {teacherName}
+                  </h2>
+                  <span className="text-[10px] text-sky-800 dark:text-sky-300 font-medium">
+                    @{activeTeacher?.username || "faculty"} • Verified Instructor
+                  </span>
+                </div>
                 {/* Teacher Switcher */}
                 {teachers.length > 0 && (
                   <div className="relative">
@@ -189,19 +197,20 @@ export default function TeacherDashboardPage() {
               </div>
 
               <p className="text-xs text-zinc-600 dark:text-zinc-300 line-clamp-2 leading-relaxed">
-                Dedicated senior faculty member coordinating secondary Physics and Chemistry laboratory curricula.
+                {activeTeacher?.address ? `Based at: ${activeTeacher.address}. ` : ""}
+                Assigned faculty instructing active department courses and lab sections.
               </p>
 
               {/* Meta Chips */}
               <div className="grid grid-cols-2 gap-2 pt-1 text-[11px] text-zinc-700 dark:text-zinc-300">
                 <div className="flex items-center gap-1.5 truncate">
                   <Droplet className="h-3.5 w-3.5 text-rose-500 shrink-0" />
-                  <span className="font-semibold">A+</span>
+                  <span className="font-semibold">{bloodType}</span>
                   <span className="text-zinc-500">Blood</span>
                 </div>
                 <div className="flex items-center gap-1.5 truncate">
                   <CalendarDays className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
-                  <span>January 2025</span>
+                  <span>{joinDate}</span>
                 </div>
                 <div className="flex items-center gap-1.5 truncate">
                   <Mail className="h-3.5 w-3.5 text-sky-600 dark:text-sky-400 shrink-0" />
@@ -217,47 +226,47 @@ export default function TeacherDashboardPage() {
 
           {/* 4 Mini Stat Badges (2x2 grid) */}
           <div className="xl:col-span-5 grid grid-cols-2 gap-3.5">
-            {/* 90% Attendance */}
+            {/* 95% Attendance */}
             <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#C3EBFA]/50 text-sky-700 dark:text-sky-300">
                 <CheckCircle2 className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">90%</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">95%</div>
                 <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Attendance</div>
               </div>
             </div>
 
-            {/* 2 Branches */}
+            {/* Branches / Subjects */}
             <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#CFCEFF]/50 text-violet-700 dark:text-violet-300">
                 <Building2 className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">2</div>
-                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Branches</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">{totalSubjects}</div>
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Subject{totalSubjects !== 1 ? "s" : ""}</div>
               </div>
             </div>
 
-            {/* 12 Lessons */}
+            {/* Total Lessons */}
             <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FAE27C]/50 text-amber-800 dark:text-amber-300">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">12</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">{totalLessons}</div>
                 <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Lessons</div>
               </div>
             </div>
 
-            {/* 14 Classes */}
+            {/* Classes */}
             <div className="rounded-2xl border border-zinc-200 dark:border-zinc-800/80 bg-white dark:bg-[#111114] p-4 shadow-sm flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#CFCEFF]/50 text-violet-700 dark:text-violet-300">
                 <Layers className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">14</div>
-                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Classes</div>
+                <div className="text-lg font-bold text-zinc-900 dark:text-white tabular-nums">{totalClasses}</div>
+                <div className="text-[11px] text-zinc-500 dark:text-zinc-400">Class{totalClasses !== 1 ? "es" : ""}</div>
               </div>
             </div>
           </div>
@@ -317,7 +326,7 @@ export default function TeacherDashboardPage() {
               {/* Time Slot Rows */}
               <div className="space-y-1.5">
                 {TIME_SLOTS.map((time) => {
-                  const row = DEFAULT_TEACHER_SCHEDULE[time];
+                  const row = scheduleMatrix[time];
                   return (
                     <div key={time} className="grid grid-cols-6 items-stretch gap-2 min-h-[64px] border-b border-zinc-100 dark:border-zinc-900/60 pb-1.5">
                       <div className="text-[11px] font-semibold text-zinc-400 dark:text-zinc-500 pt-2 pl-2">
