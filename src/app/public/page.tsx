@@ -34,6 +34,8 @@ import FAQSection from "@/components/shared/faq-section";
 import EventsShowcase from "@/components/shared/events-showcase";
 import TestimonialsSection from "@/components/shared/testimonials-section";
 import { formatDate, formatDateTime } from "@/lib/utils";
+import SlidesPinning from "@/components/shared/slides-pinning";
+import SplitText from "@/components/ui/split-text";
 
 export default function PublicPortalPage() {
   const { data: studentsData } = useStudents({ limit: 1 });
@@ -224,229 +226,289 @@ export default function PublicPortalPage() {
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section id="overview" className="relative py-20 px-6 md:px-12 text-center max-w-4xl mx-auto space-y-5">
-        <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400 shadow-sm">
-          <span className="h-1.5 w-1.5 rounded-full bg-[#991b2e] dark:bg-[#be123c]" />
-          <span>Unified Enterprise Academic Administration</span>
-        </div>
-
-        <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white leading-tight">
-          Modern Institutional Campus for Educators, Learners & Families
-        </h1>
-
-        <p className="text-sm md:text-base text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-          School Sphere coordinates classroom scheduling, real-time roll call attendance, evaluation report cards, and parent communications on a single secure platform.
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
-          <Link href="/login">
-            <Button size="lg" className="gap-2 h-9 text-xs">
-              <span>Enter Workspace</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Button>
-          </Link>
-          <a href="#portals">
-            <Button variant="outline" size="lg" className="h-9 text-xs">
-              Explore Role Portals
-            </Button>
-          </a>
-        </div>
-
-        {/* Live Academic Metric Tiles */}
-        <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-3">
-          {[
-            { label: "Enrolled Scholars", value: totalStudents, icon: Users },
-            { label: "Faculty Educators", value: totalTeachers, icon: UserCheck },
-            { label: "Classroom Cohorts", value: totalClasses, icon: Layers },
-            { label: "Curriculum Subjects", value: totalSubjects, icon: BookOpen },
-          ].map((stat, idx) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={idx}
-                className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/15 dark:bg-black/30 backdrop-blur-md text-center shadow-sm"
-              >
-                <div className="flex justify-center mb-1 text-zinc-400">
-                  <Icon className="h-4 w-4" />
-                </div>
-                <div className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight tabular-nums">
-                  {stat.value}
-                </div>
-                <div className="text-[11px] text-zinc-500 mt-0.5">{stat.label}</div>
+      {/* GSAP Slides Pinning – Overscroll Solution */}
+      <SlidesPinning>
+        {/* Slide 1: Hero Section */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] relative overflow-hidden flex flex-col justify-center items-center">
+          <div className="slide-inner w-full flex flex-col items-center justify-center py-6 md:py-10">
+            <section id="overview" className="relative py-8 md:py-12 px-6 md:px-12 text-center max-w-4xl mx-auto space-y-5 w-full">
+              <div className="inline-flex items-center gap-2 rounded-full border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900/80 px-3 py-1 text-xs text-zinc-600 dark:text-zinc-400 shadow-sm">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#991b2e] dark:bg-[#be123c]" />
+                <span>Unified Enterprise Academic Administration</span>
               </div>
-            );
-          })}
-        </div>
-      </section>
 
-      {/* Role Portal Gateways */}
-      <section id="portals" className="py-12 px-6 md:px-12 max-w-5xl mx-auto w-full">
-        <div className="text-center space-y-1 mb-8">
-          <h2 className="text-xl md:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white">
-            Access Portals
-          </h2>
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
-            Dedicated functional hubs tailored for each member of the campus community
-          </p>
-        </div>
+              <SplitText
+                as="h1"
+                type="words"
+                animation="slide-up"
+                delay={0.15}
+                stagger={0.035}
+                className="text-3xl md:text-5xl font-bold tracking-tight text-zinc-900 dark:text-white leading-tight"
+              >
+                Modern Institutional Campus for Educators, Learners & Families
+              </SplitText>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {portalCards.map((portal, idx) => {
-            const Icon = portal.icon;
-            return (
-              <Link key={idx} href={portal.link}>
-                <Card className="bg-white/10 dark:bg-black/35 backdrop-blur-md border-zinc-200/80 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/20 dark:hover:bg-black/50 transition-all group cursor-pointer h-full">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 group-hover:text-[#991b2e] dark:group-hover:text-white transition-colors">
+              <p className="text-sm md:text-base text-zinc-600 dark:text-zinc-400 max-w-2xl mx-auto leading-relaxed">
+                School Sphere coordinates classroom scheduling, real-time roll call attendance, evaluation report cards, and parent communications on a single secure platform.
+              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
+                <Link href="/login">
+                  <Button size="lg" className="gap-2 h-9 text-xs">
+                    <span>Enter Workspace</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </Link>
+                <a href="#portals">
+                  <Button variant="outline" size="lg" className="h-9 text-xs">
+                    Explore Role Portals
+                  </Button>
+                </a>
+              </div>
+
+              {/* Live Academic Metric Tiles */}
+              <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: "Enrolled Scholars", value: totalStudents, icon: Users },
+                  { label: "Faculty Educators", value: totalTeachers, icon: UserCheck },
+                  { label: "Classroom Cohorts", value: totalClasses, icon: Layers },
+                  { label: "Curriculum Subjects", value: totalSubjects, icon: BookOpen },
+                ].map((stat, idx) => {
+                  const Icon = stat.icon;
+                  return (
+                    <div
+                      key={idx}
+                      className="p-4 rounded-xl border border-zinc-200/80 dark:border-white/10 bg-white/15 dark:bg-black/30 backdrop-blur-md text-center shadow-sm"
+                    >
+                      <div className="flex justify-center mb-1 text-zinc-400">
                         <Icon className="h-4 w-4" />
                       </div>
-                      <Badge variant="secondary" className="text-[10px]">
-                        {portal.badge}
-                      </Badge>
+                      <div className="text-2xl font-semibold text-zinc-900 dark:text-white tracking-tight tabular-nums">
+                        {stat.value}
+                      </div>
+                      <div className="text-[11px] text-zinc-500 mt-0.5">{stat.label}</div>
                     </div>
-                    <CardTitle className="mt-3 text-sm font-semibold group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors">
-                      {portal.title}
-                    </CardTitle>
-                    <CardDescription className="text-xs">
-                      {portal.description}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="flex items-center gap-1 text-xs font-medium text-[#991b2e] dark:text-[#f43f5e]">
-                      <span>Launch portal view</span>
-                      <ArrowRight className="h-3 w-3" />
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      {/* Academic Departments Showcase */}
-      <section id="departments" className="py-16 md:py-20 px-6 md:px-12 max-w-6xl mx-auto w-full">
-        <div className="text-center space-y-2 mb-10 max-w-2xl mx-auto">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white font-heading">
-            Academic Curriculums
-          </h2>
-          <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
-            Comprehensive learning departments structured from elementary through advanced collegiate levels
-          </p>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {academicDepartments.map((dept, idx) => {
-            const Icon = dept.icon;
-            return (
-              <div
-                key={idx}
-                className="group flex flex-col justify-between p-6 md:p-7 min-h-[260px] rounded-2xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md shadow-lg shadow-black/5 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/15 dark:hover:bg-black/45 hover:-translate-y-1.5 transition-all duration-300 select-none"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-200/80 dark:border-zinc-700/60 bg-white/40 dark:bg-zinc-900/60 text-[#991b2e] dark:text-[#f43f5e] shadow-sm group-hover:scale-110 group-hover:bg-[#991b2e] group-hover:text-white transition-all duration-300">
-                      <Icon className="h-6 w-6" />
-                    </div>
-                    <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-zinc-200/60 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-300 border border-zinc-300/40 dark:border-zinc-700/60">
-                      {dept.code}
-                    </span>
-                  </div>
+        {/* Slide 2: Role Portal Gateways */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] relative overflow-hidden flex flex-col justify-center items-center">
+          <div className="slide-inner w-full flex flex-col items-center justify-center py-6 md:py-10">
+            <section id="portals" className="py-6 md:py-10 px-6 md:px-12 max-w-5xl mx-auto w-full">
+              <div className="text-center space-y-1 mb-8">
+                <SplitText
+                  as="h2"
+                  type="words"
+                  animation="slide-up"
+                  delay={0.1}
+                  stagger={0.04}
+                  className="text-xl md:text-2xl font-semibold tracking-tight text-zinc-900 dark:text-white"
+                >
+                  Access Portals
+                </SplitText>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                  Dedicated functional hubs tailored for each member of the campus community
+                </p>
+              </div>
 
-                  <div className="space-y-2">
-                    <h3 className="text-base md:text-lg font-bold text-zinc-900 dark:text-white font-heading group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors leading-snug">
-                      {dept.name}
-                    </h3>
-                    <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                      {dept.desc}
-                    </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {portalCards.map((portal, idx) => {
+                  const Icon = portal.icon;
+                  return (
+                    <Link key={idx} href={portal.link}>
+                      <Card className="bg-white/10 dark:bg-black/35 backdrop-blur-md border-zinc-200/80 dark:border-white/10 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/20 dark:hover:bg-black/50 transition-all group cursor-pointer h-full">
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 group-hover:text-[#991b2e] dark:group-hover:text-white transition-colors">
+                              <Icon className="h-4 w-4" />
+                            </div>
+                            <Badge variant="secondary" className="text-[10px]">
+                              {portal.badge}
+                            </Badge>
+                          </div>
+                          <CardTitle className="mt-3 text-sm font-semibold group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors">
+                            {portal.title}
+                          </CardTitle>
+                          <CardDescription className="text-xs">
+                            {portal.description}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="pt-0">
+                          <div className="flex items-center gap-1 text-xs font-medium text-[#991b2e] dark:text-[#f43f5e]">
+                            <span>Launch portal view</span>
+                            <ArrowRight className="h-3 w-3" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Slide 3: Academic Departments Showcase */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] relative overflow-hidden flex flex-col justify-center items-center">
+          <div className="slide-inner w-full flex flex-col items-center justify-center py-6 md:py-10">
+            <section id="departments" className="py-6 md:py-10 px-6 md:px-12 max-w-6xl mx-auto w-full">
+              <div className="text-center space-y-2 mb-8 max-w-2xl mx-auto">
+                <SplitText
+                  as="h2"
+                  type="words"
+                  animation="slide-up"
+                  delay={0.1}
+                  stagger={0.04}
+                  className="text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight text-zinc-900 dark:text-white font-heading"
+                >
+                  Academic Curriculums
+                </SplitText>
+                <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">
+                  Comprehensive learning departments structured from elementary through advanced collegiate levels
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {academicDepartments.map((dept, idx) => {
+                  const Icon = dept.icon;
+                  return (
+                    <div
+                      key={idx}
+                      className="group flex flex-col justify-between p-6 md:p-7 min-h-[260px] rounded-2xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md shadow-lg shadow-black/5 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/15 dark:hover:bg-black/45 hover:-translate-y-1.5 transition-all duration-300 select-none"
+                    >
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-zinc-200/80 dark:border-zinc-700/60 bg-white/40 dark:bg-zinc-900/60 text-[#991b2e] dark:text-[#f43f5e] shadow-sm group-hover:scale-110 group-hover:bg-[#991b2e] group-hover:text-white transition-all duration-300">
+                            <Icon className="h-6 w-6" />
+                          </div>
+                          <span className="text-xs font-mono font-semibold px-2.5 py-1 rounded-md bg-zinc-200/60 dark:bg-zinc-800/80 text-zinc-600 dark:text-zinc-300 border border-zinc-300/40 dark:border-zinc-700/60">
+                            {dept.code}
+                          </span>
+                        </div>
+
+                        <div className="space-y-2">
+                          <h3 className="text-base md:text-lg font-bold text-zinc-900 dark:text-white font-heading group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors leading-snug">
+                            {dept.name}
+                          </h3>
+                          <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">
+                            {dept.desc}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="pt-4 mt-auto border-t border-zinc-200/50 dark:border-white/10 flex items-center justify-between text-xs font-semibold text-[#991b2e] dark:text-[#f43f5e]">
+                        <span>Explore Curriculum</span>
+                        <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
+          </div>
+        </div>
+
+        {/* Slide 4: University Events & Programs Showcase */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] relative overflow-hidden flex flex-col justify-center items-center">
+          <div className="slide-inner w-full flex flex-col items-center justify-center py-6 md:py-10">
+            <EventsShowcase />
+          </div>
+        </div>
+
+        {/* Slide 5: Campus Bulletin Notices */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] relative overflow-hidden flex flex-col justify-center items-center">
+          <div className="slide-inner w-full flex flex-col items-center justify-center py-6 md:py-10">
+            <section id="bulletin" className="py-6 md:py-10 px-6 md:px-12 max-w-6xl mx-auto w-full">
+              <div className="space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-zinc-200/80 dark:border-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 text-[#991b2e] dark:text-[#f43f5e] shadow-sm">
+                      <Megaphone className="h-4.5 w-4.5" />
+                    </div>
+                    <div>
+                      <SplitText
+                        as="h3"
+                        type="words"
+                        animation="slide-up"
+                        delay={0.1}
+                        stagger={0.03}
+                        className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white tracking-tight font-heading"
+                      >
+                        Official Campus Bulletins & Announcements
+                      </SplitText>
+                      <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Live institutional updates and schedule notices</p>
+                    </div>
                   </div>
+                  <Link href="/announcements" className="text-xs md:text-sm font-semibold text-[#991b2e] dark:text-[#f43f5e] hover:underline flex items-center gap-1">
+                    <span>View All Bulletins</span>
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Link>
                 </div>
 
-                <div className="pt-4 mt-auto border-t border-zinc-200/50 dark:border-white/10 flex items-center justify-between text-xs font-semibold text-[#991b2e] dark:text-[#f43f5e]">
-                  <span>Explore Curriculum</span>
-                  <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {displayedAnnouncements.map((an: any) => (
+                    <div
+                      key={an.id}
+                      className="group flex flex-col justify-between p-6 md:p-7 min-h-[220px] rounded-2xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md shadow-lg shadow-black/5 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/15 dark:hover:bg-black/45 hover:-translate-y-1 transition-all duration-300"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-3">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#991b2e]/10 dark:bg-[#be123c]/20 px-3 py-1 text-[11px] font-semibold text-[#991b2e] dark:text-[#f43f5e] border border-[#991b2e]/20">
+                            <Calendar className="h-3 w-3" />
+                            <span>{formatDate(an.date)}</span>
+                          </span>
+                          <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                            Notice
+                          </span>
+                        </div>
+
+                        <h4 className="font-heading text-base md:text-lg font-bold text-zinc-900 dark:text-white group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors leading-snug line-clamp-2">
+                          {an.title}
+                        </h4>
+
+                        <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-4">
+                          {an.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-4 mt-auto border-t border-zinc-200/50 dark:border-white/10 flex items-center justify-between">
+                        <span className="text-xs font-semibold text-[#991b2e] dark:text-[#f43f5e] inline-flex items-center gap-1.5 group-hover:underline">
+                          <span>Read Bulletin</span>
+                          <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
-            );
-          })}
+            </section>
+          </div>
         </div>
-      </section>
 
-      {/* University Events & Programs Showcase matching reference design */}
-      <EventsShowcase />
+        {/* Slide 6: Voices of School Sphere Testimonials Marquee */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] h-[calc(100vh-64px)] relative overflow-hidden flex flex-col justify-center items-center">
+          <div className="slide-inner w-full flex flex-col items-center justify-center py-6 md:py-10">
+            <TestimonialsSection />
+          </div>
+        </div>
 
-      {/* Campus Bulletin Notices */}
-      <section id="bulletin" className="py-16 md:py-20 px-6 md:px-12 max-w-6xl mx-auto w-full">
-        <div className="space-y-6">
-          <div className="flex items-center justify-between pb-4 border-b border-zinc-200/80 dark:border-white/10">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700/60 text-[#991b2e] dark:text-[#f43f5e] shadow-sm">
-                <Megaphone className="h-4.5 w-4.5" />
-              </div>
-              <div>
-                <h3 className="text-lg md:text-xl font-bold text-zinc-900 dark:text-white tracking-tight font-heading">
-                  Official Campus Bulletins & Announcements
-                </h3>
-                <p className="text-xs md:text-sm text-zinc-500 dark:text-zinc-400">Live institutional updates and schedule notices</p>
-              </div>
+        {/* Slide 7: FAQ & Campus Footer (Unpinned natural scroll end) */}
+        <div className="slide-panel w-full min-h-[calc(100vh-64px)] relative flex flex-col justify-between">
+          <div className="slide-inner w-full flex flex-col justify-between py-6">
+            {/* FAQ & Knowledge Section */}
+            <FAQSection />
+
+            {/* Footer matching user reference design */}
+            <div className="w-full max-w-[1480px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 mt-12 mb-8">
+              <DashboardFooter />
             </div>
-            <Link href="/announcements" className="text-xs md:text-sm font-semibold text-[#991b2e] dark:text-[#f43f5e] hover:underline flex items-center gap-1">
-              <span>View All Bulletins</span>
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {displayedAnnouncements.map((an: any) => (
-              <div
-                key={an.id}
-                className="group flex flex-col justify-between p-6 md:p-7 min-h-[220px] rounded-2xl border border-zinc-200/80 dark:border-white/10 bg-white/10 dark:bg-black/35 backdrop-blur-md shadow-lg shadow-black/5 hover:border-zinc-300 dark:hover:border-white/25 hover:bg-white/15 dark:hover:bg-black/45 hover:-translate-y-1 transition-all duration-300"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-[#991b2e]/10 dark:bg-[#be123c]/20 px-3 py-1 text-[11px] font-semibold text-[#991b2e] dark:text-[#f43f5e] border border-[#991b2e]/20">
-                      <Calendar className="h-3 w-3" />
-                      <span>{formatDate(an.date)}</span>
-                    </span>
-                    <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                      Notice
-                    </span>
-                  </div>
-
-                  <h4 className="font-heading text-base md:text-lg font-bold text-zinc-900 dark:text-white group-hover:text-[#991b2e] dark:group-hover:text-[#f43f5e] transition-colors leading-snug line-clamp-2">
-                    {an.title}
-                  </h4>
-
-                  <p className="text-xs md:text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed line-clamp-4">
-                    {an.description}
-                  </p>
-                </div>
-
-                <div className="pt-4 mt-auto border-t border-zinc-200/50 dark:border-white/10 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-[#991b2e] dark:text-[#f43f5e] inline-flex items-center gap-1.5 group-hover:underline">
-                    <span>Read Bulletin</span>
-                    <ArrowRight className="h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
-                  </span>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
-      </section>
-
-      {/* Voices of School Sphere Testimonials Marquee */}
-      <TestimonialsSection />
-
-      {/* FAQ & Knowledge Section ready for RAG system */}
-      <FAQSection />
-
-      {/* Footer matching user reference design */}
-      <div className="w-full max-w-[1480px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 mt-8">
-        <DashboardFooter />
-      </div>
+      </SlidesPinning>
     </div>
   );
 }

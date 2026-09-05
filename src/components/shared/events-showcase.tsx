@@ -6,6 +6,7 @@ import Link from "next/link";
 import { GraduationCap, ArrowLeft, ArrowRight, Calendar, Clock } from "lucide-react";
 import { useEvents } from "@/hooks/use-notices";
 import { formatDate } from "@/lib/utils";
+import SplitText from "@/components/ui/split-text";
 
 // Curated thematic fallbacks matching the user's reference image if backend event doesn't supply a picture
 const fallbackEventImages = [
@@ -98,10 +99,16 @@ export default function EventsShowcase() {
           </div>
 
           {/* Big Headline in Plus Jakarta Sans matching reference */}
-          <h2 className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-zinc-900 dark:text-white leading-[1.15]">
-            Discover Exciting University <br className="hidden sm:inline" />
-            Events And Programs
-          </h2>
+          <SplitText
+            as="h2"
+            type="words"
+            animation="slide-up"
+            delay={0.1}
+            stagger={0.035}
+            className="font-heading text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-[-0.03em] text-zinc-900 dark:text-white leading-[1.15]"
+          >
+            Discover Exciting University Events And Programs
+          </SplitText>
         </div>
 
         {/* Carousel Arrow Controls matching reference image */}
