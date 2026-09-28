@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 let rawBaseUrl = (
   process.env.NEXT_PUBLIC_API_BASE_URL ||
-  "https://school-sphere-server.onrender.com/api/v1"
+  "https://school-sphere-server-production.up.railway.app/api/v1"
 ).trim();
 
 // Strip trailing slash

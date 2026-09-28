@@ -2,6 +2,11 @@
 
 Enterprise School Management & Academic Administration Platform built with Next.js 16 (Turbopack), Tailwind CSS, Framer Motion, TanStack Query, and Prisma.
 
+## 🌐 Live Links & Repository
+- **Live Backend Server**: [https://school-sphere-server-production.up.railway.app/](https://school-sphere-server-production.up.railway.app/)
+- **Live API Endpoint**: [https://school-sphere-server-production.up.railway.app/api/v1](https://school-sphere-server-production.up.railway.app/api/v1)
+- **GitHub Repository**: [https://github.com/MdShamim5669/School-Sphere](https://github.com/MdShamim5669/School-Sphere)
+
 ## ✨ Features
 
 - 🏛️ **Public Campus Page**: Interactive hero, statistics, dynamic departments showcase, interactive FAQ accordion, smooth auto-scrolling capabilities.
